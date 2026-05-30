@@ -1,238 +1,986 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import profileImg from './soumya.1708.jpg';
+import aboutImg from './about.jpg';
+import sanjeevaniImg from './sanjeevani.jpg'; 
 
-export default function Portfolio() {
+// Import certificate images 
+import tttImg from './Techno Trio Trot.jpg';
+import qbImg from './QuizzBizz.jpg';
+import hoImg from './HackOctober.jpg';
+import hpImg from './Hult Prize.jpg';
+import icImg from './Intra Cup.jpg';
+
+// --- INJECT CUSTOM STYLES & FONTS ---
+const StyleInject = () => (
+  <style dangerouslySetInnerHTML={{__html: `
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700;900&display=swap');
+    
+    .font-sans { font-family: 'Inter', sans-serif; }
+    .font-display { font-family: 'Space Grotesk', sans-serif; }
+    
+    .grain-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0) }
+      20% { transform: translate(-2px, 1px) }
+      40% { transform: translate(-1px, -1px) }
+      60% { transform: translate(2px, 1px) }
+      80% { transform: translate(1px, -1px) }
+      100% { transform: translate(0) }
+    }
+    .hover-glitch:hover {
+      animation: glitch 0.3s linear infinite;
+      color: #22d3ee;
+      text-shadow: 2px 0 #8b5cf6, -2px 0 #ef4444;
+    }
+  `}} />
+);
+
+// --- TERMINAL LOADER COMPONENT ---
+const TerminalLoader = ({ onComplete }) => {
+  const [text, setText] = useState("> System initializing...");
+  
+  useEffect(() => {
+    setTimeout(() => setText("> Loading DSA modules..."), 800);
+    setTimeout(() => setText("> Establishing secure connection to Soumya.Dev..."), 1600);
+    setTimeout(() => setText("> Access granted. Welcome."), 2400);
+    setTimeout(() => onComplete(), 3000);
+  }, [onComplete]);
+
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-gray-300 font-sans selection:bg-teal-500/30">
-      
+    <div className="fixed inset-0 z-[99999] bg-[#030303] flex flex-col items-center justify-center font-mono text-cyan-400">
+      <div className="w-full max-w-lg p-6">
+        <div className="flex gap-2 mb-4">
+          <div className="w-3 h-3 rounded-full bg-red-500"></div>
+          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+        </div>
+        <p className="text-lg md:text-xl animate-pulse">{text}<span className="inline-block w-2 h-5 bg-cyan-400 ml-1 translate-y-1"></span></p>
+      </div>
+    </div>
+  );
+};
+
+// --- MAGNETIC BUTTON WRAPPER ---
+const Magnetic = ({ children }) => {
+  const ref = useRef(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouse = (e) => {
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = ref.current.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    setPosition({ x: middleX * 0.2, y: middleY * 0.2 }); 
+  };
+  const reset = () => setPosition({ x: 0, y: 0 });
+
+  return React.cloneElement(children, {
+    ref,
+    onMouseMove: handleMouse,
+    onMouseLeave: reset,
+    style: { ...children.props.style, transform: `translate(${position.x}px, ${position.y}px)`, transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }
+  });
+};
+
+// --- SPOTLIGHT HOVER CARD ---
+const SpotlightCard = ({ children, className = "" }) => {
+  const divRef = useRef(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState(0);
+
+  const handleMouseMove = (e) => {
+    if (!divRef.current) return;
+    const rect = divRef.current.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  return (
+    <div
+      ref={divRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setOpacity(1)}
+      onMouseLeave={() => setOpacity(0)}
+      className={`relative overflow-hidden rounded-2xl bg-[#0a0a0a]/80 backdrop-blur-md border border-gray-800 transition-colors duration-300 ${className}`}
+    >
+      <div
+        className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-500 ease-in-out"
+        style={{
+          opacity,
+          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(6,182,212,0.12), transparent 40%)`,
+        }}
+      />
+      <div className="relative z-10 h-full">{children}</div>
+    </div>
+  );
+};
+
+// --- TYPEWRITER COMPONENT ---
+const Typewriter = ({ text, speed = 100, delay = 0, loop = false }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [phase, setPhase] = useState('waiting'); 
+
+  useEffect(() => {
+    const startTimeout = setTimeout(() => setPhase('typing'), delay);
+    return () => clearTimeout(startTimeout);
+  }, [delay]);
+
+  useEffect(() => {
+    if (phase === 'typing') {
+      if (displayedText.length < text.length) {
+        const timeout = setTimeout(() => setDisplayedText(text.slice(0, displayedText.length + 1)), speed);
+        return () => clearTimeout(timeout);
+      } else {
+        if (loop) {
+          const timeout = setTimeout(() => setPhase('deleting'), 2000); 
+          return () => clearTimeout(timeout);
+        } else {
+          setPhase('done');
+        }
+      }
+    } else if (phase === 'deleting') {
+      if (displayedText.length > 0) {
+        const timeout = setTimeout(() => setDisplayedText(text.slice(0, displayedText.length - 1)), speed / 2); 
+        return () => clearTimeout(timeout);
+      } else {
+        const timeout = setTimeout(() => setPhase('typing'), 500); 
+        return () => clearTimeout(timeout);
+      }
+    }
+  }, [phase, displayedText, text, speed, loop]);
+
+  return (
+    <>
+      {displayedText}
+      {phase !== 'done' && <span className="animate-pulse text-cyan-400 font-light ml-1">|</span>}
+    </>
+  );
+};
+
+// --- CONTINUOUS SCROLL REVEAL COMPONENT ---
+const Reveal = ({ children }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), { threshold: 0.15 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className={`transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-24'}`}>
+      {children}
+    </div>
+  );
+};
+
+// --- CONTINUOUS 3D FLIP IMAGE COMPONENT ---
+const FlipImage = ({ src, alt, className }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => setIsFlipped(entry.isIntersecting), { threshold: 0.4 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="w-full h-full relative z-10" style={{ perspective: '1000px' }}>
+      <img
+        src={src} alt={alt}
+        className={`${className} transition-all duration-[1500ms] ease-[cubic-bezier(0.175,0.885,0.32,1.275)]`}
+        style={{ transform: isFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)', opacity: isFlipped ? 1 : 0 }}
+      />
+    </div>
+  );
+};
+// -------------------------------------------------------------
+
+export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
+  const [activeSection, setActiveSection] = useState('home');
+  
+  // LIGHTBOX (MODAL) STATE
+  const [selectedImage, setSelectedImage] = useState(null);
+  const openModal = (imgSrc) => setSelectedImage(imgSrc);
+  const closeModal = () => setSelectedImage(null);
+
+  useEffect(() => {
+    const updateMousePosition = (e) => setMousePosition({ x: e.clientX, y: e.clientY });
+    
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+      const totalScroll = document.documentElement.scrollTop;
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      setScrollProgress(`${(totalScroll / windowHeight) * 100}%`);
+    };
+
+    // Scroll Spy for Navbar
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('section').forEach(sec => observer.observe(sec));
+
+    window.addEventListener('mousemove', updateMousePosition);
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('mousemove', updateMousePosition);
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
+  }, []);
+
+  const certificateList = [
+    { image: tttImg, description: "participation in Techno Trio Trot organised by CurBrain TMSL" },
+    { image: qbImg, description: "participation in Quizz-Bizz organised by IIC TMSL" },
+    { image: hoImg, description: "participation in the Hacktoberfest & Open Source Workshop organised by SAMARTH TMSL" },
+    { image: hpImg, description: "participation in the Hult Prize organised by IIC TMSL" },
+    { image: icImg, description: "participation in the IntraCup organised by Geekonix TMSL" }
+  ];
+
+  if (isLoading) return <TerminalLoader onComplete={() => setIsLoading(false)} />;
+
+  return (
+    <div className="min-h-screen bg-[#030303] text-gray-300 font-sans selection:bg-cyan-500/30 overflow-x-hidden [&_*]:cursor-none cursor-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <StyleInject />
+      <div className="grain-overlay"></div>
+
+      {/* TOP SCROLL PROGRESS BAR */}
+      <div className="fixed top-0 left-0 h-1 bg-gradient-to-r from-cyan-400 to-violet-500 z-[100] transition-all duration-150 ease-out" style={{ width: scrollProgress }}></div>
+
+      {/* CUSTOM RADAR CURSOR */}
+      <div 
+        className="fixed top-0 left-0 pointer-events-none z-[100] transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center hidden md:flex"
+        style={{ transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)` }}
+      >
+        <div className="w-10 h-10 border-2 border-cyan-500/50 rounded-full absolute transition-transform ease-out duration-75"></div>
+        <div className="w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee] transition-transform ease-out duration-75"></div>
+      </div>
+
       {/* NAVBAR */}
-      <nav className="sticky top-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-gray-800">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center text-sm font-medium">
-          <span className="text-white font-bold text-lg tracking-tighter">Soumya.Dev</span>
-          <div className="hidden md:flex gap-6">
-            <a href="#about" className="hover:text-white transition-colors">About</a>
-            <a href="#education" className="hover:text-white transition-colors">Education</a>
-            <a href="#skills" className="hover:text-white transition-colors">Skills</a>
-            <a href="#projects" className="hover:text-white transition-colors">Projects</a>
-            <a href="#achievements" className="hover:text-white transition-colors">Achievements</a>
+      <nav className="fixed top-0 w-full z-50 bg-[#030303]/80 backdrop-blur-md border-b border-gray-800/50 mt-1">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center text-[15.4px] font-medium">
+          <Magnetic>
+            <div className="flex items-center gap-2 cursor-none hover-glitch">
+              <span className="text-cyan-400 font-mono text-[17.6px]">{`>_`}</span>
+              <span className="text-white font-bold text-lg font-display tracking-tighter">Soumya.Dev</span>
+            </div>
+          </Magnetic>
+          <div className="hidden md:flex gap-8 text-gray-400 font-display">
+            <Magnetic><a href="#home" className={`${activeSection === 'home' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300 cursor-none`}>Home</a></Magnetic>
+            <Magnetic><a href="#about" className={`${activeSection === 'about' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300 cursor-none`}>About</a></Magnetic>
+            <Magnetic><a href="#education" className={`${activeSection === 'education' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300 cursor-none`}>Education</a></Magnetic>
+            <Magnetic><a href="#mastery" className={`${activeSection === 'mastery' || activeSection === 'cp' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300 cursor-none`}>Skills</a></Magnetic>
+            <Magnetic><a href="#projects" className={`${activeSection === 'projects' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300 cursor-none`}>Projects</a></Magnetic>
           </div>
-          <a href="#contact" className="bg-white text-black px-4 py-2 rounded-md font-semibold hover:bg-gray-200 transition-colors">
-            Hire Me
-          </a>
+          <Magnetic>
+            <a href="#contact" className="bg-white text-black px-5 py-2 rounded-md font-bold font-display hover:bg-cyan-400 hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] cursor-none">
+              Hire Me
+            </a>
+          </Magnetic>
         </div>
       </nav>
 
-      <main className="max-w-4xl mx-auto px-6 pt-20 pb-24 space-y-32">
+      {/* AMBIENT GLOW & PARALLAX DOT BACKGROUND */}
+      <div className="fixed inset-0 z-0 pointer-events-none flex justify-center items-center overflow-hidden">
+        <div className="absolute w-[600px] h-[600px] md:w-[1000px] md:h-[1000px] bg-cyan-600/10 rounded-full blur-[120px] md:blur-[180px] -translate-x-1/4 -translate-y-1/4"></div>
+        <div className="absolute w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-violet-600/10 rounded-full blur-[100px] md:blur-[150px] translate-x-1/3 translate-y-1/3"></div>
+        <div 
+          className="absolute inset-0 transition-transform duration-75 ease-linear" 
+          style={{ 
+            backgroundImage: 'radial-gradient(rgba(34, 211, 238, 0.15) 1.5px, transparent 1.5px)', 
+            backgroundSize: '48px 48px',
+            transform: `translateY(${scrollY * -0.15}px)` 
+          }}>
+        </div>
+      </div>
+
+      <main className="relative z-10 max-w-5xl mx-auto px-6 pt-32 pb-24 space-y-32" style={{ scrollBehavior: 'smooth' }}>
         
         {/* HERO SECTION */}
-        <section className="space-y-6 pt-10">
-          <div className="inline-block px-3 py-1 bg-green-500/10 text-green-400 text-xs font-semibold rounded-full border border-green-500/20">
-            ● OPEN TO OPPORTUNITIES
+        <section id="home" className="relative flex flex-col items-center justify-center min-h-[85vh]">
+          <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12 w-full">
+            <div className="flex-1 space-y-6">
+              
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 text-cyan-400 text-[13.2px] font-semibold rounded-full border border-cyan-500/20 mb-4 font-mono shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                OPEN TO OPPORTUNITIES
+              </div>
+
+              {/* TYPING ANIMATION HEADERS */}
+              <div className="space-y-3">
+                <p className="text-[22px] md:text-[26.4px] text-cyan-400 font-mono tracking-tight">
+                  Hi I am ..
+                </p>
+                
+                <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-7xl font-black font-display text-white tracking-tighter min-h-[1.2em] whitespace-nowrap drop-shadow-md">
+                  <Typewriter text="Soumya Mondal" speed={100} delay={200} loop={false} />
+                </h1>
+                
+                <h2 className="text-lg md:text-xl lg:text-2xl font-light text-gray-400 border-l-2 border-cyan-500/50 pl-4 min-h-[1.5em] flex items-center">
+                  <Typewriter text="DSA Enthusiast | Backend Developer | Java & Spring Boot" speed={60} delay={1800} loop={true} />
+                </h2>
+              </div>
+
+              <p className="text-gray-400 max-w-lg text-[17.6px] leading-relaxed pt-2 animate-[fadeIn_1s_ease-out_2s_both]">
+                Engineering student building reliable applications from frontend interfaces to backend APIs. Focused on clean code, database architectures, and real-world system implementations.
+              </p>
+              
+              {/* ACTION BUTTONS */}
+              <div className="flex flex-row items-center gap-3 md:gap-4 pt-4 relative z-20 w-full overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] whitespace-nowrap animate-[fadeIn_1s_ease-out_2.5s_both]">
+                <Magnetic>
+                  <a href="#projects" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-black font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                    View Projects <span>↓</span>
+                  </a>
+                </Magnetic>
+                <Magnetic>
+                  <a href="https://github.com/soumya1708" target="_blank" rel="noreferrer" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-cyan-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
+                    GitHub
+                  </a>
+                </Magnetic>
+                <Magnetic>
+                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-violet-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" /></svg>
+                    LinkedIn
+                  </a>
+                </Magnetic>
+                <Magnetic>
+                  <a href="mailto:soumya.mondal1708@gmail.com" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-red-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    Email
+                  </a>
+                </Magnetic>
+              </div>
+            </div>
+
+            <div className="flex-1 flex justify-center md:justify-end shrink-0">
+              <div className="relative w-72 h-72 md:w-[420px] md:h-[420px] rounded-full p-2 overflow-hidden shadow-[0_0_80px_rgba(6,182,212,0.15)] bg-[#050505]">
+                <div className="absolute inset-0 rounded-full border border-gray-800"></div>
+                <div className="absolute inset-[-10px] rounded-full border-t-2 border-r-2 border-cyan-400 border-l-2 border-l-violet-500 animate-[spin_8s_linear_infinite] opacity-50"></div>
+                <FlipImage 
+                  src={profileImg} 
+                  alt="Soumya Mondal" 
+                  className="w-full h-full object-cover object-top rounded-full p-1"
+                />
+              </div>
+            </div>
           </div>
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight">
-            Soumya Mondal
-          </h1>
-          <h2 className="text-2xl md:text-3xl font-medium text-gray-400">
-            Backend Developer | Java & Spring Boot
-          </h2>
-          <p className="text-gray-400 max-w-2xl text-lg leading-relaxed">
-            Engineering student building robust backend architectures, APIs, and AI-integrated applications. Focused on writing clean code and creating scalable systems that solve real-world problems.
-          </p>
-          <div className="flex gap-4 pt-4">
-            <a href="https://github.com/yourusername" className="px-6 py-2.5 bg-[#1a1a1a] border border-gray-800 hover:border-gray-600 rounded-md text-white font-medium transition-all">GitHub</a>
-            <a href="https://linkedin.com/in/yourusername" className="px-6 py-2.5 bg-[#1a1a1a] border border-gray-800 hover:border-gray-600 rounded-md text-white font-medium transition-all">LinkedIn</a>
-            <a href="mailto:your.email@example.com" className="px-6 py-2.5 bg-[#1a1a1a] border border-gray-800 hover:border-gray-600 rounded-md text-white font-medium transition-all">Email</a>
+          
+          {/* Animated Scroll Down Indicator */}
+          <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 hover:opacity-100 transition-opacity">
+             <span className="text-[11px] font-mono text-cyan-400 tracking-widest uppercase">Scroll</span>
+             <div className="w-6 h-10 border-2 border-gray-600 rounded-full flex justify-center p-1 relative">
+               <div className="w-1.5 h-3 bg-cyan-400 rounded-full animate-[bounce_1.5s_infinite]"></div>
+             </div>
           </div>
         </section>
 
-        {/* EDUCATION & CLUBS */}
-        <section id="education" className="space-y-8">
-          <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-            <span className="text-gray-600">/</span> Education & Involvement
-          </h3>
-          <div className="border-l-2 border-gray-800 pl-6 space-y-10">
-            <div className="relative">
-              <div className="absolute -left-[31px] top-1.5 h-3 w-3 bg-gray-400 rounded-full border-4 border-[#0a0a0a]"></div>
-              <h4 className="text-lg font-bold text-white">Bachelor of Technology</h4>
-              <p className="text-teal-400 text-sm font-medium mb-2">Information Technology • Techno Main Salt Lake, Kolkata</p>
-              <p className="text-xs text-gray-500 mb-3">2025 - 2029 (Expected)</p>
-              <p className="text-gray-400 text-sm">
-                Focusing on core computer science fundamentals, backend engineering, data structures, and database management systems.
-              </p>
-            </div>
-            <div className="relative">
-              <div className="absolute -left-[31px] top-1.5 h-3 w-3 bg-gray-600 rounded-full border-4 border-[#0a0a0a]"></div>
-              <h4 className="text-lg font-bold text-white">The Astronomy Club</h4>
-              <p className="text-teal-400 text-sm font-medium mb-2">Active Member • Techno Main Salt Lake</p>
-              <p className="text-xs text-gray-500 mb-3">Dec 2025 - Present</p>
-              <p className="text-gray-400 text-sm">
-                Participating in technical campus initiatives, telescope operations, and sky-watching events.
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* ABOUT ME SECTION */}
+        <Reveal>
+          <section id="about" className="space-y-8 relative z-20 pt-16">
+            <h3 className="text-4xl md:text-5xl font-bold font-display text-white flex items-center gap-4 mb-8">
+              <span className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20 text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+              </span>
+              About Me
+            </h3>
 
-        {/* TECHNICAL ARSENAL */}
-        <section id="skills" className="space-y-8">
-          <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-            <span className="text-gray-600">/</span> Technical Arsenal
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="space-y-3">
-              <h4 className="text-white font-semibold border-b border-gray-800 pb-2">Languages</h4>
-              <ul className="text-sm space-y-2 text-gray-400">
-                <li>Java</li>
-                <li>Python</li>
-                <li>SQL</li>
-              </ul>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-16">
+              <div className="flex-1 space-y-6">
+                <h4 className="text-2xl md:text-3xl font-bold font-display text-cyan-400 mb-6">
+                  Bridging Logic & Engineering
+                </h4>
+                
+                <div className="space-y-6 text-gray-300 leading-relaxed text-[15.4px] md:text-[17.6px]">
+                  <p>
+                    Hi, I'm <span className="font-semibold text-white">Soumya Mondal</span>. I'm currently pursuing my 4-year B.Tech journey at <span className="font-semibold text-white">Techno Main Salt Lake (Batch 2025 - 2029)</span> to dive deep into computer science and engineering.
+                  </p>
+                  <p>
+                    My mathematical and computing core thrives heavily on mapping highly complex algorithmic structures, mastering multi-dimensional <span className="font-semibold text-white">Data Structures and Algorithms (DSA)</span> within Java environments, and configuring interactive full-stack modern network pipelines. Beyond pure computation, I possess deep technical fluency across agile development practices, code modularity, and operational layout automation systems.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex-1 flex justify-center md:justify-end shrink-0">
+                <SpotlightCard className="p-2 w-[280px] h-[280px] md:w-[380px] md:h-[380px] rounded-full !bg-transparent border-none">
+                  <div className="absolute inset-0 rounded-full border border-gray-800"></div>
+                  <div className="absolute inset-[-5px] rounded-full border-b-2 border-l-2 border-violet-400 border-t-2 border-t-cyan-500 animate-[spin_6s_linear_infinite] opacity-40"></div>
+                  <FlipImage 
+                    src={aboutImg} 
+                    alt="Soumya Mondal About" 
+                    className="w-full h-full object-cover object-[center_20%] rounded-full p-2"
+                  />
+                </SpotlightCard>
+              </div>
             </div>
-            <div className="space-y-3">
-              <h4 className="text-white font-semibold border-b border-gray-800 pb-2">Backend & APIs</h4>
-              <ul className="text-sm space-y-2 text-gray-400">
-                <li>Spring Boot</li>
-                <li>Spring Data JPA</li>
-                <li>Hibernate</li>
-                <li>REST APIs</li>
-              </ul>
+          </section>
+        </Reveal>
+
+        {/* TIMELINE SECTION */}
+        <Reveal>
+          <section id="education" className="space-y-12">
+            <h3 className="text-4xl md:text-5xl font-bold font-display text-white flex items-center gap-4 mb-8">
+              <span className="p-3 bg-violet-500/10 rounded-xl border border-violet-500/20 text-violet-400 shadow-[0_0_20px_rgba(139,92,246,0.15)]">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 14v7.5"></path>
+                </svg>
+              </span>
+              Education Timeline
+            </h3>
+            
+            <div className="relative pl-8 md:pl-0 pt-4">
+              <div className="absolute left-[11px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500/50 via-violet-500/50 to-transparent -translate-x-1/2"></div>
+              
+              <div className="space-y-16">
+                <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center md:odd:flex-row-reverse group">
+                  <div className="absolute left-[-33px] md:left-1/2 w-4 h-4 bg-[#050505] border-2 border-cyan-400 rounded-full -translate-x-1/2 z-10 group-hover:bg-cyan-400 group-hover:scale-125 transition-all duration-300 shadow-[0_0_15px_rgba(6,182,212,0.8)]"></div>
+                  
+                  <div className="md:w-[45%] w-full mb-2 md:mb-0 flex flex-col md:items-end items-start text-left md:text-right md:group-odd:items-start md:group-odd:text-left gap-2">
+                    <span className="inline-block px-4 py-1.5 bg-[#111] border border-gray-700 text-[13.2px] font-mono text-cyan-400 rounded-md shadow-lg">2025 - 2029 (Expected)</span>
+                  </div>
+                  
+                  <SpotlightCard className="md:w-[45%] w-full p-6">
+                    <h4 className="text-xl font-bold font-display text-white">Bachelor of Technology</h4>
+                    <p className="text-cyan-400 text-[15.4px] mt-1 font-medium">Information Technology • Techno Main Salt Lake</p>
+                    <p className="text-gray-400 text-[15.4px] mt-3 leading-relaxed">Core coursework focuses on Data Structures, Database Management Systems, and Object-Oriented Programming.</p>
+                  </SpotlightCard>
+                </div>
+
+                 <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center md:odd:flex-row-reverse group">
+                  <div className="absolute left-[-33px] md:left-1/2 w-4 h-4 bg-[#050505] border-2 border-gray-600 rounded-full -translate-x-1/2 z-10 group-hover:border-violet-400 group-hover:scale-125 transition-all duration-300"></div>
+                  
+                  <div className="md:w-[45%] w-full mb-2 md:mb-0 flex flex-col md:items-end items-start text-left md:text-right md:group-odd:items-start md:group-odd:text-left gap-2">
+                    <span className="inline-block px-4 py-1.5 bg-[#111] border border-gray-800 text-[13.2px] font-mono text-gray-400 rounded-md">2023 - 2025</span>
+                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-violet-500/10 border border-violet-500/20 text-[13.2px] font-mono text-violet-400 rounded-md">
+                       84%
+                    </span>
+                  </div>
+
+                  <SpotlightCard className="md:w-[45%] w-full p-6">
+                    <h4 className="text-xl font-bold font-display text-white">Higher Secondary (12th)</h4>
+                    <p className="text-gray-400 text-[15.4px] mt-1 font-medium">Science • S.K.S Public School</p>
+                    <p className="text-gray-500 text-[15.4px] mt-3 leading-relaxed">Focused on core science subjects laying a strong foundation for engineering and analytical problem-solving.</p>
+                  </SpotlightCard>
+                </div>
+
+                <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center md:odd:flex-row-reverse group">
+                  <div className="absolute left-[-33px] md:left-1/2 w-4 h-4 bg-[#050505] border-2 border-gray-600 rounded-full -translate-x-1/2 z-10 group-hover:border-violet-400 group-hover:scale-125 transition-all duration-300"></div>
+                  
+                  <div className="md:w-[45%] w-full mb-2 md:mb-0 flex flex-col md:items-end items-start text-left md:text-right md:group-odd:items-start md:group-odd:text-left gap-2">
+                    <span className="inline-block px-4 py-1.5 bg-[#111] border border-gray-800 text-[13.2px] font-mono text-gray-400 rounded-md">Completed 2023</span>
+                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-violet-500/10 border border-violet-500/20 text-[13.2px] font-mono text-violet-400 rounded-md">
+                       93.6%
+                    </span>
+                  </div>
+
+                  <SpotlightCard className="md:w-[45%] w-full p-6">
+                    <h4 className="text-xl font-bold font-display text-white">Secondary (10th)</h4>
+                    <p className="text-gray-400 text-[15.4px] mt-1 font-medium">General • S.K.S Public School</p>
+                    <p className="text-gray-500 text-[15.4px] mt-3 leading-relaxed">Completed secondary education with a strong academic record and a focus on foundational mathematics and science.</p>
+                  </SpotlightCard>
+                </div>
+              </div>
             </div>
-            <div className="space-y-3">
-              <h4 className="text-white font-semibold border-b border-gray-800 pb-2">Databases & Tools</h4>
-              <ul className="text-sm space-y-2 text-gray-400">
-                <li>MySQL</li>
-                <li>Git & GitHub</li>
-                <li>Vercel</li>
-                <li>JavaFX</li>
-              </ul>
+          </section>
+        </Reveal>
+
+        {/* SKILLS & MASTERY SECTION */}
+        <Reveal>
+          <section id="mastery" className="space-y-12 relative z-20">
+            <div className="text-center pb-6">
+              <h3 className="text-4xl md:text-5xl font-bold font-display text-white inline-flex items-center justify-center gap-4 relative pb-4">
+                <span className="text-cyan-400">{`</>`}</span>
+                Skills & Mastery
+              </h3>
+              <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-violet-500 mx-auto rounded-full mt-2"></div>
             </div>
-            <div className="space-y-3">
-              <h4 className="text-white font-semibold border-b border-gray-800 pb-2">Innovation</h4>
-              <ul className="text-sm space-y-2 text-gray-400">
-                <li>Generative AI APIs</li>
-                <li>Google Gemini Integration</li>
-                <li>Claude API</li>
-              </ul>
+
+            <div className="grid lg:grid-cols-2 gap-12 pt-4">
+              
+              {/* Left Column: Technical Stack & Tools */}
+              <div className="space-y-6">
+                <h4 className="text-xl font-bold font-display text-cyan-400 flex items-center gap-2 mb-6">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                  Technical Stack & Tools
+                </h4>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <SpotlightCard className="p-6">
+                    <p className="text-[11px] text-gray-500 font-mono uppercase tracking-widest mb-4">Languages</p>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+                        <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8h1a4 4 0 110 8h-1M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8zM6 2v3M10 2v3M14 2v3"></path></svg>
+                        Java (Core + DSA)
+                      </div>
+                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+                        <svg className="w-5 h-5" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M53.8 4.3C38.4 4.3 35.9 11 35.9 11L35.8 24.9H54.4V30H34.8C34.8 30 15.4 29.2 15.4 48.3C15.4 67.2 32.2 66.2 32.2 66.2H37.3V57.3C37.3 47.1 45.9 38.8 56.4 38.8H75.5C75.5 38.8 85.5 39.2 85.5 29V13.6C85.5 13.6 86.9 4.3 73.8 4.3H53.8ZM45.9 12.7C48.1 12.7 49.9 14.5 49.9 16.7C49.9 18.9 48.1 20.7 45.9 20.7C43.7 20.7 41.9 18.9 41.9 16.7C41.9 14.5 43.7 12.7 45.9 12.7Z" fill="#387EB8"/>
+                          <path d="M56.2 105.7C71.6 105.7 74.1 99 74.1 99L74.2 85.1H55.5V80H75.1C75.1 80 94.5 80.8 94.5 61.7C94.5 42.8 77.7 43.8 77.7 43.8H72.6V52.7C72.6 62.9 64 71.2 53.5 71.2H34.4C34.4 71.2 24.4 70.8 24.4 81V96.4C24.4 96.4 23 105.7 36.1 105.7H56.2ZM64.1 97.3C61.9 97.3 60.1 95.5 60.1 93.3C60.1 91.1 61.9 89.3 64.1 89.3C66.3 89.3 68.1 91.1 68.1 93.3C68.1 95.5 66.3 97.3 64.1 97.3Z" fill="#FFE052"/>
+                        </svg>
+                        Python
+                      </div>
+                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+                        <svg className="w-5 h-5 text-blue-600" viewBox="0 0 128 128" fill="currentColor">
+                          <path fill="#283593" d="M117.5 33.5l-45-26a17 17 0 00-17 0l-45 26a17 17 0 00-8.5 14.7v51.6a17 17 0 008.5 14.7l45 26a17 17 0 0017 0l45-26a17 17 0 008.5-14.7V48.2a17 17 0 00-8.5-14.7z"/>
+                          <path fill="#FFF" d="M92 84.4A32.1 32.1 0 1192 43.6l-13.3 15.5a13.7 13.7 0 100 9.8z"/>
+                        </svg>
+                        C Language
+                      </div>
+                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+                        <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M4 7c0-1.657 3.582-3 8-3s8 1.343 8 3-3.582 3-8 3-8-1.343-8-3z"></path><path d="M4 7v10c0 1.657 3.582 3 8 3s8-1.343 8-3V7"></path><path d="M4 12c0 1.657 3.582 3 8 3s8-1.343 8-3"></path></svg>
+                        MySQL
+                      </div>
+                    </div>
+                  </SpotlightCard>
+
+                  <SpotlightCard className="p-6 h-fit">
+                    <p className="text-[11px] text-gray-500 font-mono uppercase tracking-widest mb-4">Backend Architecture</p>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+                        <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M12 2C6.477 2 2 6.477 2 12v8h8c5.523 0 10-4.477 10-10V2H12z"></path></svg>
+                        Spring Boot
+                      </div>
+                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                        Hibernate
+                      </div>
+                    </div>
+                  </SpotlightCard>
+                </div>
+              </div>
+
+              {/* Right Column: Professional Attributes (Progress Bars) */}
+              <div className="space-y-6 lg:pl-8 mt-8 lg:mt-0">
+                <h4 className="text-xl font-bold font-display text-violet-400 flex items-center gap-2 mb-8">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                  Professional Attributes
+                </h4>
+                
+                <div className="space-y-6">
+                  <div>
+                    <div className="flex justify-between text-[15.4px] font-bold text-white mb-2">
+                      <span className="flex items-center gap-2">
+                        <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
+                        Problem Solving
+                      </span>
+                      <span className="text-cyan-400">90%</span>
+                    </div>
+                    <div className="w-full bg-[#111] h-2 rounded-full overflow-hidden border border-gray-800">
+                      <div className="bg-gradient-to-r from-cyan-600 to-cyan-400 h-full rounded-full shadow-[0_0_10px_rgba(34,211,238,0.5)]" style={{ width: '90%' }}></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-[15.4px] font-bold text-white mb-2">
+                      <span className="flex items-center gap-2">
+                        <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        Teamwork
+                      </span>
+                      <span className="text-cyan-400">90%</span>
+                    </div>
+                    <div className="w-full bg-[#111] h-2 rounded-full overflow-hidden border border-gray-800">
+                      <div className="bg-gradient-to-r from-cyan-600 to-cyan-400 h-full rounded-full shadow-[0_0_10px_rgba(34,211,238,0.5)]" style={{ width: '90%' }}></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-[15.4px] font-bold text-white mb-2">
+                      <span className="flex items-center gap-2">
+                        <svg className="w-5 h-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                        Creativity & Design Thinking
+                      </span>
+                      <span className="text-violet-400">85%</span>
+                    </div>
+                    <div className="w-full bg-[#111] h-2 rounded-full overflow-hidden border border-gray-800">
+                      <div className="bg-gradient-to-r from-violet-600 to-violet-400 h-full rounded-full shadow-[0_0_10px_rgba(139,92,246,0.5)]" style={{ width: '85%' }}></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between text-[15.4px] font-bold text-white mb-2">
+                      <span className="flex items-center gap-2">
+                        <svg className="w-5 h-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        Communication
+                      </span>
+                      <span className="text-violet-400">75%</span>
+                    </div>
+                    <div className="w-full bg-[#111] h-2 rounded-full overflow-hidden border border-gray-800">
+                      <div className="bg-gradient-to-r from-violet-600 to-violet-400 h-full rounded-full shadow-[0_0_10px_rgba(139,92,246,0.5)]" style={{ width: '75%' }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
+
+        {/* COMPETITIVE PROGRAMMING SECTION */}
+        <Reveal>
+          <section id="cp" className="space-y-8 relative z-20">
+            <h3 className="text-4xl md:text-5xl font-bold font-display text-white flex items-center gap-4 mb-8">
+              <span className="p-3 bg-violet-500/10 rounded-xl border border-violet-500/20 text-violet-400 shadow-[0_0_20px_rgba(139,92,246,0.15)]">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+              </span>
+              Competitive Programming
+            </h3>
+            
+            <div className="grid md:grid-cols-2 gap-6 pt-4">
+              
+              {/* LeetCode Detailed Card */}
+              <SpotlightCard className="p-0 group cursor-none hover:border-yellow-500/50">
+                <a href="https://leetcode.com/u/Shiro_Oni1708/" target="_blank" rel="noreferrer" className="block p-8 h-full flex flex-col justify-between cursor-none">
+                  <div>
+                    <div className="flex justify-between items-center mb-6">
+                      <h4 className="text-2xl font-bold font-display text-white flex items-center gap-3">
+                        <svg className="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.939 5.939 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.001-1.955a1.378 1.378 0 0 0-1.951-.001l-2.396 2.392a2.921 2.921 0 0 1-4.034.037l-.032-.032-4.246-4.162a3.176 3.176 0 0 1-.682-.976 3.298 3.298 0 0 1-.186-.543 3.396 3.396 0 0 1-.035-1.285 3.181 3.181 0 0 1 .655-1.144l3.702-3.96 5.166-5.523a1.375 1.375 0 0 0-.062-1.957l-3.527-3.393A1.375 1.375 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.383h7.942c.762 0 1.38-.621 1.38-1.383a1.38 1.38 0 0 0-1.38-1.382H10.617z"/></svg>
+                        LeetCode
+                      </h4>
+                      <span className="text-gray-400 text-[15.4px] font-mono">@Shiro_Oni1708</span>
+                    </div>
+                    
+                    <div className="flex gap-6 mb-8 text-[15.4px]">
+                      <div>
+                        <p className="text-gray-500 uppercase tracking-widest text-[11px] mb-1">Global Rank</p>
+                        <p className="text-white font-mono font-medium">1,254,772</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500 uppercase tracking-widest text-[11px] mb-1">Contest Rating</p>
+                        <p className="text-white font-mono font-medium">1,470</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-end justify-between border-t border-gray-800 pt-6">
+                      <div>
+                        <p className="text-5xl font-black font-display text-white leading-none">126</p>
+                        <p className="text-[15.4px] text-gray-500 mt-2 font-medium">Total Problems Solved</p>
+                      </div>
+                      <div className="text-right space-y-1 text-[13.2px] font-mono">
+                        <p className="text-cyan-400">Easy: 110</p>
+                        <p className="text-yellow-500">Med: 15</p>
+                        <p className="text-red-500">Hard: 1</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-[#111] border border-gray-800 rounded-xl flex items-center gap-4">
+                    <div className="w-12 h-12 bg-[#1a1a1a] rounded-lg border border-gray-700 flex items-center justify-center text-green-500 shadow-[0_0_10px_rgba(34,197,94,0.2)]">
+                       <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l8.66 5v10L12 22l-8.66-5V7L12 2z"></path></svg>
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Recent Badge</p>
+                      <p className="text-white text-[15.4px] font-bold">50 Days Badge 2026</p>
+                    </div>
+                  </div>
+                </a>
+              </SpotlightCard>
+
+              {/* HackerRank Detailed Card */}
+              <SpotlightCard className="p-0 group cursor-none hover:border-green-500/50">
+                <a href="https://www.hackerrank.com/profile/soumya_mondal171" target="_blank" rel="noreferrer" className="block p-8 h-full flex flex-col justify-between cursor-none">
+                  <div>
+                    <div className="flex justify-between items-center mb-6">
+                      <h4 className="text-2xl font-bold font-display text-white flex items-center gap-3">
+                        <svg className="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M11.986 2c-5.518 0-9.986 4.468-9.986 9.986 0 5.518 4.468 9.986 9.986 9.986 5.518 0 9.986-4.468 9.986-9.986C21.972 6.468 17.504 2 11.986 2zm4.331 14.5h-2.12v-3.784H9.774v3.784H7.654V7.5h2.12v3.815h4.423V7.5h2.12v9z"/></svg>
+                        HackerRank
+                      </h4>
+                      <span className="text-gray-400 text-[15.4px] font-mono">@soumya_mondal171</span>
+                    </div>
+                    
+                    <div className="flex gap-6 mb-8 text-[15.4px]">
+                      <div>
+                        <p className="text-gray-500 uppercase tracking-widest text-[11px] mb-1">Location</p>
+                        <p className="text-white flex items-center gap-2 font-medium">India 🇮🇳</p>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-gray-800 pt-6">
+                      <p className="text-[19.8px] font-bold font-display text-white mb-4">My Badges</p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-2 p-5 bg-[#111] border border-gray-800 rounded-xl flex items-center gap-5">
+                    <div className="w-16 h-16 bg-[#1a1a1a] rounded-xl border border-gray-700 flex flex-col items-center justify-center text-white relative">
+                       <svg className="absolute w-full h-full text-gray-800 drop-shadow-md" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l8.66 5v10L12 22l-8.66-5V7L12 2z"></path></svg>
+                       <svg className="w-6 h-6 text-cyan-400 relative z-10" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M53.8 4.3C38.4 4.3 35.9 11 35.9 11L35.8 24.9H54.4V30H34.8C34.8 30 15.4 29.2 15.4 48.3C15.4 67.2 32.2 66.2 32.2 66.2H37.3V57.3C37.3 47.1 45.9 38.8 56.4 38.8H75.5C75.5 38.8 85.5 39.2 85.5 29V13.6C85.5 13.6 86.9 4.3 73.8 4.3H53.8ZM45.9 12.7C48.1 12.7 49.9 14.5 49.9 16.7C49.9 18.9 48.1 20.7 45.9 20.7C43.7 20.7 41.9 18.9 41.9 16.7C41.9 14.5 43.7 12.7 45.9 12.7Z" fill="currentColor"/>
+                          <path d="M56.2 105.7C71.6 105.7 74.1 99 74.1 99L74.2 85.1H55.5V80H75.1C75.1 80 94.5 80.8 94.5 61.7C94.5 42.8 77.7 43.8 77.7 43.8H72.6V52.7C72.6 62.9 64 71.2 53.5 71.2H34.4C34.4 71.2 24.4 70.8 24.4 81V96.4C24.4 96.4 23 105.7 36.1 105.7H56.2ZM64.1 97.3C61.9 97.3 60.1 95.5 60.1 93.3C60.1 91.1 61.9 89.3 64.1 89.3C66.3 89.3 68.1 91.1 68.1 93.3C68.1 95.5 66.3 97.3 64.1 97.3Z" fill="#FFE052"/>
+                       </svg>
+                    </div>
+                    <div>
+                      <p className="text-white text-[19.8px] font-bold flex items-center gap-2">
+                         Python <span className="text-yellow-500 text-[13.2px]">★★★</span>
+                      </p>
+                      <p className="text-[15.4px] text-gray-400 mt-1 font-medium">Silver Level</p>
+                      <p className="text-[13.2px] font-mono text-cyan-400 mt-1">150 Points Earned</p>
+                    </div>
+                  </div>
+                </a>
+              </SpotlightCard>
+
+            </div>
+          </section>
+        </Reveal>
 
         {/* ENGINEERING PROJECTS */}
-        <section id="projects" className="space-y-8">
-          <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-            <span className="text-gray-600">/</span> Engineering Projects
-          </h3>
-          <div className="grid md:grid-cols-2 gap-6">
+        <Reveal>
+          <section id="projects" className="space-y-12 relative z-20">
+            <h3 className="text-4xl md:text-5xl font-bold font-display text-white flex items-center gap-4 mb-8">
+              <span className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20 text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+              </span>
+              Engineering Projects
+            </h3>
             
-            <div className="bg-[#111] border border-gray-800 p-6 rounded-xl hover:border-gray-600 transition-colors flex flex-col justify-between group">
-              <div>
-                <h4 className="text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition-colors">Sanjeevani</h4>
-                <p className="text-sm text-gray-400 mb-4 line-clamp-3">
-                  A healthcare-focused application featuring an integrated backend architecture and intelligent AI features. Built with robust API connectivity and database synchronization.
+            <div className="grid md:grid-cols-2 gap-6">
+              <SpotlightCard className="p-0 group flex flex-col hover:border-cyan-500/50">
+                <div className="h-56 border-b border-gray-800 overflow-hidden relative group-hover:opacity-90 transition-opacity">
+                  <img src={sanjeevaniImg} alt="Sanjeevani Dashboard" className="w-full h-full object-cover object-top" />
+                </div>
+                
+                <div className="p-8 flex flex-col flex-grow">
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="text-2xl font-bold font-display text-cyan-400 group-hover:text-cyan-300 transition-colors">Sanjeevani</h4>
+                  </div>
+                  
+                  <p className="text-gray-400 text-[15.4px] leading-relaxed mb-6 flex-grow">
+                    A hyper-local medical matching application featuring an AI-integrated backend architecture. Automatically routes emergency requests for blood and organ donors using robust API connectivity and secure database synchronization.
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    <span className="px-2 py-1 bg-[#111] border border-gray-800 rounded flex items-center gap-1 text-[13.2px] text-gray-400 font-mono">
+                      <svg className="w-3 h-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8h1a4 4 0 110 8h-1M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8zM6 2v3M10 2v3M14 2v3"></path></svg>
+                      Java
+                    </span>
+                    <span className="px-2 py-1 bg-[#111] border border-gray-800 rounded flex items-center gap-1 text-[13.2px] text-gray-400 font-mono">
+                      <svg className="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M12 2C6.477 2 2 6.477 2 12v8h8c5.523 0 10-4.477 10-10V2H12z"></path></svg>
+                      Spring Boot
+                    </span>
+                    <span className="px-2 py-1 bg-[#111] border border-gray-800 rounded flex items-center gap-1 text-[13.2px] text-gray-400 font-mono">
+                      <svg className="w-3 h-3 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M4 7c0-1.657 3.582-3 8-3s8 1.343 8 3-3.582 3-8 3-8-1.343-8-3z"></path><path d="M4 7v10c0 1.657 3.582 3 8 3s8-1.343 8-3V7"></path><path d="M4 12c0 1.657 3.582 3 8 3s8-1.343 8-3"></path></svg>
+                      MySQL
+                    </span>
+                    <span className="px-2 py-1 bg-[#111] border border-gray-800 rounded flex items-center gap-1 text-[13.2px] text-gray-400 font-mono">
+                      <svg className="w-3 h-3 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                      Gemini API
+                    </span>
+                  </div>
+
+                  <Magnetic>
+                    <a href="https://github.com/soumya1708/Sanjeevani" target="_blank" rel="noreferrer" className="inline-flex justify-center items-center gap-2 px-5 py-3 bg-cyan-600/10 text-cyan-400 font-bold text-[15.4px] font-display tracking-wide uppercase rounded-lg hover:bg-cyan-500 hover:text-black transition-colors cursor-none border border-cyan-500/20 w-full md:w-auto">
+                       Visit Project
+                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                  </Magnetic>
+                </div>
+              </SpotlightCard>
+
+            </div>
+          </section>
+        </Reveal>
+
+        {/* CERTIFICATES & RECOGNITION SECTION WITH LIGHTBOX */}
+        <Reveal>
+          <section id="certificates" className="space-y-12 relative z-20">
+            <h3 className="text-4xl md:text-5xl font-bold font-display text-white flex items-center gap-4 mb-8">
+              <span className="p-3 bg-violet-500/10 rounded-xl border border-violet-500/20 text-violet-400 shadow-[0_0_20px_rgba(139,92,246,0.15)]">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+              </span>
+              Certificates & Recognition
+            </h3>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {certificateList.map((cert, index) => (
+                <SpotlightCard key={index} className="p-4 hover:border-violet-500/50">
+                  <div className="overflow-hidden rounded-lg border border-gray-800 mb-4 h-48 relative group">
+                    <img 
+                      src={cert.image} 
+                      alt={`Certificate ${index + 1}`} 
+                      className="w-full h-full object-cover object-center cursor-none transition-transform hover:scale-105 duration-500"
+                      onClick={() => openModal(cert.image)}
+                    />
+                    <div 
+                      className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-none"
+                      onClick={() => openModal(cert.image)}
+                    >
+                       <svg className="w-8 h-8 text-white drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                    </div>
+                  </div>
+                  <div className="border-l-2 border-violet-500 pl-3">
+                    <p className="text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-1">Participation</p>
+                    <p className="text-[15.4px] text-gray-300 leading-relaxed font-medium">This is my {cert.description}.</p>
+                  </div>
+                </SpotlightCard>
+              ))}
+            </div>
+          </section>
+        </Reveal>
+
+        {/* GET IN TOUCH / CONTACT SECTION */}
+        <Reveal>
+          <section id="contact" className="max-w-5xl mx-auto space-y-12 relative z-20 pt-10">
+            
+            <h3 className="text-4xl md:text-5xl font-bold font-display text-white flex items-center justify-center gap-4">
+              <span className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20 text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+              </span>
+              Get In Touch
+            </h3>
+
+            <div className="grid md:grid-cols-2 gap-16 items-start pt-8">
+              
+              <div className="space-y-10">
+                <div>
+                  <h4 className="text-3xl font-bold font-display text-white mb-4">Let's build something beautiful together.</h4>
+                  <p className="text-gray-400 text-[15.4px] md:text-[17.6px] leading-relaxed">
+                    Engineering student focused on robust backend systems. Whether you want to discuss algorithmic optimizations, a full-stack project, or just want to chat about code and design—drop me a line!
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <Magnetic>
+                    <a href="mailto:soumya.mondal1708@gmail.com" className="flex items-center gap-5 p-4 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-cyan-500 transition-colors group cursor-none">
+                      <div className="w-14 h-14 bg-[#111] border border-gray-800 rounded-xl flex items-center justify-center group-hover:bg-cyan-500/10 transition-colors">
+                         <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                      </div>
+                      <div>
+                        <p className="text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-1">Email Me</p>
+                        <p className="text-white font-medium text-[15.4px] md:text-[17.6px] truncate max-w-[200px] md:max-w-full">soumya.mondal1708@gmail.com</p>
+                      </div>
+                    </a>
+                  </Magnetic>
+
+                  <Magnetic>
+                    <a href="tel:8158056468" className="flex items-center gap-5 p-4 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-violet-500 transition-colors group cursor-none">
+                      <div className="w-14 h-14 bg-[#111] border border-gray-800 rounded-xl flex items-center justify-center group-hover:bg-violet-500/10 transition-colors">
+                         <svg className="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                      </div>
+                      <div>
+                        <p className="text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-1">Call Me</p>
+                        <p className="text-white font-medium text-[15.4px] md:text-[17.6px]">+91 8158056468</p>
+                      </div>
+                    </a>
+                  </Magnetic>
+                </div>
+              </div>
+
+              <SpotlightCard className="p-8 h-full">
+                <h3 className="text-2xl font-bold font-display text-white mb-2">Start a Conversation</h3>
+                <p className="text-[15.4px] text-gray-400 mb-8 font-medium">
+                  Interested in working together? Fill out the form to open your email client with a pre-filled message.
                 </p>
-              </div>
-              <div className="flex flex-wrap gap-2 text-xs font-medium text-gray-400">
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">Java</span>
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">Spring Boot</span>
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">MySQL</span>
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">AI API</span>
-              </div>
-            </div>
+                <form className="space-y-6 h-full flex flex-col justify-between" action="mailto:soumya.mondal1708@gmail.com" method="GET">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-2">Your Name</label>
+                      <input type="text" name="subject" placeholder="e.g. John Doe" className="w-full bg-[#111] border border-gray-800 rounded-lg p-3 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
+                    </div>
+                    <div>
+                      <label className="block text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-2">Email Address</label>
+                      <input type="email" name="email" placeholder="e.g. abc@gmail.com" className="w-full bg-[#111] border border-gray-800 rounded-lg p-3 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
+                    </div>
+                  </div>
 
-            <div className="bg-[#111] border border-gray-800 p-6 rounded-xl hover:border-gray-600 transition-colors flex flex-col justify-between group">
-              <div>
-                <h4 className="text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition-colors">VolunteerConnect</h4>
-                <p className="text-sm text-gray-400 mb-4 line-clamp-3">
-                  A matching platform pairing volunteers with non-governmental organizations. Developed for competitive project presentations with a focus on data mapping and operational impact.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2 text-xs font-medium text-gray-400">
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">Backend Design</span>
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">System Architecture</span>
-              </div>
-            </div>
+                  <div>
+                    <label className="block text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-2">Contact Number</label>
+                    <input type="tel" name="phone" placeholder="e.g. +91 XXXXX XXXXX" className="w-full bg-[#111] border border-gray-800 rounded-lg p-3 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
+                  </div>
 
-            <div className="bg-[#111] border border-gray-800 p-6 rounded-xl hover:border-gray-600 transition-colors flex flex-col justify-between group">
-              <div>
-                <h4 className="text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition-colors">SkipIt</h4>
-                <p className="text-sm text-gray-400 mb-4 line-clamp-3">
-                  A feasibility analysis and system design project tackling canteen queue management. Included target market analysis, revenue modeling, and operational flow architectures.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2 text-xs font-medium text-gray-400">
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">System Design</span>
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">Pitch Deck</span>
-              </div>
-            </div>
+                  <div>
+                    <label className="block text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-2">Your Message</label>
+                    <textarea name="body" rows="4" placeholder="I'm interested in working with you..." className="w-full bg-[#111] border border-gray-800 rounded-lg p-3 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none"></textarea>
+                  </div>
+                  
+                  <Magnetic>
+                    <button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-500 text-black font-bold font-display py-4 rounded-lg text-[17.6px] transition-colors flex justify-center items-center gap-2 cursor-none mt-auto">
+                      Open Email Client <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                    </button>
+                  </Magnetic>
+                </form>
+              </SpotlightCard>
 
-            <div className="bg-[#111] border border-gray-800 p-6 rounded-xl hover:border-gray-600 transition-colors flex flex-col justify-between group">
-              <div>
-                <h4 className="text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition-colors">Hospital Management System</h4>
-                <p className="text-sm text-gray-400 mb-4 line-clamp-3">
-                  A desktop-based management system using Data Access Object (DAO) patterns for clean architecture, seamless database operations, and structured MVC folders.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2 text-xs font-medium text-gray-400">
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">JavaFX</span>
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">MySQL</span>
-                <span className="bg-[#1a1a1a] px-2 py-1 rounded">DAO Pattern</span>
-              </div>
             </div>
-
-          </div>
-        </section>
-
-        {/* IMPACT & RECOGNITION (Hackathons & Certs) */}
-        <section id="achievements" className="space-y-8">
-          <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-            <span className="text-gray-600">/</span> Impact & Recognition
-          </h3>
-          <div className="grid gap-4">
-            <div className="flex justify-between items-center p-4 bg-[#111] border border-gray-800 rounded-lg">
-              <div>
-                <h4 className="text-white font-bold">Google Solution Challenge 2026</h4>
-                <p className="text-sm text-gray-400">Active participant leveraging technology for community impact.</p>
-              </div>
-              <span className="text-sm text-gray-500 font-mono">2026</span>
-            </div>
-            <div className="flex justify-between items-center p-4 bg-[#111] border border-gray-800 rounded-lg">
-              <div>
-                <h4 className="text-white font-bold">Unstop Hack-Your-Way & INTRA Cup</h4>
-                <p className="text-sm text-gray-400">Competed in rapid prototyping and software development challenges.</p>
-              </div>
-              <span className="text-sm text-gray-500 font-mono">2026</span>
-            </div>
-            <div className="flex justify-between items-center p-4 bg-[#111] border border-gray-800 rounded-lg">
-              <div>
-                <h4 className="text-white font-bold">Google AI Agents Intensive</h4>
-                <p className="text-sm text-gray-400">Course completion in context engineering and multi-agent systems.</p>
-              </div>
-              <span className="text-sm text-gray-500 font-mono">2025</span>
-            </div>
-            <div className="flex justify-between items-center p-4 bg-[#111] border border-gray-800 rounded-lg">
-              <div>
-                <h4 className="text-white font-bold">Kaggle Python Coder Badge</h4>
-                <p className="text-sm text-gray-400">Recognized for Python programming proficiency on the Kaggle platform.</p>
-              </div>
-              <span className="text-sm text-gray-500 font-mono">2025</span>
-            </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
 
       </main>
 
-      {/* FOOTER & CONTACT */}
-      <footer id="contact" className="border-t border-gray-800 bg-[#050505] py-16">
-        <div className="max-w-xl mx-auto px-6 text-center space-y-6">
-          <h2 className="text-2xl font-bold text-white">Start a Conversation</h2>
-          <p className="text-gray-400 text-sm">
-            Interested in working together on a hackathon, open-source project, or backend system? I am always open to discussing new opportunities and technical challenges.
-          </p>
-          <a href="mailto:your.email@example.com" className="inline-block bg-white text-black px-8 py-3 rounded-md font-bold hover:bg-gray-200 transition-colors mt-4">
-            Get In Touch
-          </a>
-          <p className="text-xs text-gray-600 pt-12">
-            © 2026 Soumya Mondal. Engineered for Performance.
-          </p>
+      {/* FOOTER */}
+      <Reveal>
+        <footer className="border-t border-gray-800 bg-[#020202] py-10 px-6 relative z-20 mt-20">
+          <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            
+            <div className="space-y-2 text-center md:text-left">
+              <h2 className="text-xl font-bold font-display text-white flex items-center justify-center md:justify-start gap-2 hover-glitch">
+                <span className="text-cyan-400">{`>_`}</span> Soumya.dev
+              </h2>
+              <p className="text-[13.2px] text-gray-600 font-mono tracking-widest uppercase">
+                © {new Date().getFullYear()} Soumya Mondal. Engineered for Performance.
+              </p>
+            </div>
+
+            <div className="flex gap-4">
+              <Magnetic>
+                <a href="https://github.com/soumya1708" target="_blank" rel="noreferrer" className="p-3 bg-[#111] border border-gray-800 rounded-lg hover:border-cyan-500/50 hover:text-white transition-colors cursor-none block">
+                  <span className="sr-only">GitHub</span>
+                  <svg className="w-5 h-5 text-current" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
+                </a>
+              </Magnetic>
+              <Magnetic>
+                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-3 bg-[#111] border border-gray-800 rounded-lg hover:border-violet-500/50 hover:text-white transition-colors cursor-none block">
+                   <span className="sr-only">LinkedIn</span>
+                   <svg className="w-5 h-5 text-current" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" /></svg>
+                </a>
+              </Magnetic>
+            </div>
+
+          </div>
+        </footer>
+      </Reveal>
+
+      {/* LIGHTBOX (MODAL) VIEW */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4 backdrop-blur-sm cursor-none"
+          onClick={closeModal} 
+        >
+          <img 
+            src={selectedImage} 
+            alt="Certificate Full View" 
+            className="max-w-full max-h-[90vh] rounded-xl border-2 border-gray-700 shadow-2xl transition-transform transform scale-100"
+            onClick={(e) => e.stopPropagation()} 
+          />
+          <Magnetic>
+            <button 
+              className="absolute top-6 right-6 p-4 bg-[#111] rounded-full text-white hover:bg-red-500 hover:text-white transition-colors cursor-none border border-gray-700 shadow-xl"
+              onClick={closeModal}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+          </Magnetic>
         </div>
-      </footer>
+      )}
 
     </div>
   );
