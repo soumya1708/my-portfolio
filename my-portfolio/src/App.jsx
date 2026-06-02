@@ -362,7 +362,7 @@ export default function App() {
                   </a>
                 </Magnetic>
                 <Magnetic>
-                  <a href="mailto:soumya.mondal1708@gmail.com" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-red-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none">
+                  <a href="#contact" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-red-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     Email
                   </a>
@@ -571,7 +571,7 @@ export default function App() {
               {/* Right Column: Professional Attributes (Progress Bars) */}
               <div className="space-y-6 lg:pl-8 mt-8 lg:mt-0">
                 <h4 className="text-xl font-bold font-display text-violet-400 flex items-center gap-2 mb-8">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012-2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                   Professional Attributes
                 </h4>
                 
@@ -722,7 +722,7 @@ export default function App() {
                     <div className="w-16 h-16 bg-[#1a1a1a] rounded-xl border border-gray-700 flex flex-col items-center justify-center text-white relative">
                        <svg className="absolute w-full h-full text-gray-800 drop-shadow-md" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l8.66 5v10L12 22l-8.66-5V7L12 2z"></path></svg>
                        <svg className="w-6 h-6 text-cyan-400 relative z-10" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M53.8 4.3C38.4 4.3 35.9 11 35.9 11L35.8 24.9H54.4V30H34.8C34.8 30 15.4 29.2 15.4 48.3C15.4 67.2 32.2 66.2 32.2 66.2H37.3V57.3C37.3 47.1 45.9 38.8 56.4 38.8H75.5C75.5 38.8 85.5 39.2 85.5 29V13.6C85.5 13.6 86.9 4.3 73.8 4.3H53.8ZM45.9 12.7C48.1 12.7 49.9 14.5 49.9 16.7C49.9 18.9 48.1 20.7 45.9 20.7C43.7 20.7 41.9 18.9 41.9 16.7C41.9 14.5 43.7 12.7 45.9 12.7Z" fill="currentColor"/>
+                          <path d="M53.8 4.3C38.4 4.3 35.9 11 35.9 11L35.8 24.9H54.4V30H34.8C34.8 30 15.4 29.2 15.4 48.3C15.4 67.2 32.2 66.2 32.2 66.2H37.3V57.3C37.3 47.1 45.9 38.8 56.4 38.8H75.5C75.5 38.8 85.5 39.2 85.5 29V13.6C85.5 13.6 86.9 4.3 73.8 4.3H53.8Z" fill="currentColor"/>
                           <path d="M56.2 105.7C71.6 105.7 74.1 99 74.1 99L74.2 85.1H55.5V80H75.1C75.1 80 94.5 80.8 94.5 61.7C94.5 42.8 77.7 43.8 77.7 43.8H72.6V52.7C72.6 62.9 64 71.2 53.5 71.2H34.4C34.4 71.2 24.4 70.8 24.4 81V96.4C24.4 96.4 23 105.7 36.1 105.7H56.2ZM64.1 97.3C61.9 97.3 60.1 95.5 60.1 93.3C60.1 91.1 61.9 89.3 64.1 89.3C66.3 89.3 68.1 91.1 68.1 93.3C68.1 95.5 66.3 97.3 64.1 97.3Z" fill="#FFE052"/>
                        </svg>
                     </div>
@@ -885,36 +885,41 @@ export default function App() {
                 </div>
               </div>
 
-              <SpotlightCard className="p-8 h-full">
-                <h3 className="text-2xl font-bold font-display text-white mb-2">Start a Conversation</h3>
-                <p className="text-[15.4px] text-gray-400 mb-8 font-medium">
-                  Interested in working together? Fill out the form to open your email client with a pre-filled message.
-                </p>
-                <form className="space-y-6 h-full flex flex-col justify-between" action="mailto:soumya.mondal1708@gmail.com" method="GET">
+              <SpotlightCard className="p-8 h-fit">
+                <form 
+                  className="space-y-6" 
+                  action="https://formsubmit.co/soumya.mondal1708@gmail.com" 
+                  method="POST"
+                >
+                  {/* FormSubmit Hidden Configuration Tags */}
+                  <input type="hidden" name="_subject" value="New message from Soumya.Dev Portfolio!" />
+                  <input type="hidden" name="_captcha" value="false" />
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-2">Your Name</label>
-                      <input type="text" name="subject" placeholder="e.g. John Doe" className="w-full bg-[#111] border border-gray-800 rounded-lg p-3 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
+                      <label className="block text-[13.2px] font-mono text-gray-400 uppercase tracking-widest mb-2">Your Name</label>
+                      <input type="text" name="name" required placeholder="e.g. Neha Singh" className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
                     </div>
                     <div>
-                      <label className="block text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-2">Email Address</label>
-                      <input type="email" name="email" placeholder="e.g. abc@gmail.com" className="w-full bg-[#111] border border-gray-800 rounded-lg p-3 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
+                      <label className="block text-[13.2px] font-mono text-gray-400 uppercase tracking-widest mb-2">Email Address</label>
+                      <input type="email" name="email" required placeholder="e.g. abc@gmail.com" className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-2">Contact Number</label>
-                    <input type="tel" name="phone" placeholder="e.g. +91 XXXXX XXXXX" className="w-full bg-[#111] border border-gray-800 rounded-lg p-3 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
+                    <label className="block text-[13.2px] font-mono text-gray-400 uppercase tracking-widest mb-2">Contact Number</label>
+                    <input type="tel" name="phone" placeholder="e.g. +91 XXXXX XXXXX" className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
                   </div>
 
                   <div>
-                    <label className="block text-[13.2px] font-mono text-gray-500 uppercase tracking-widest mb-2">Your Message</label>
-                    <textarea name="body" rows="4" placeholder="I'm interested in working with you..." className="w-full bg-[#111] border border-gray-800 rounded-lg p-3 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none"></textarea>
+                    <label className="block text-[13.2px] font-mono text-gray-400 uppercase tracking-widest mb-2">Your Message</label>
+                    <textarea name="message" required rows="4" placeholder="e.g. I'd love to collaborate on a project with you..." className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none"></textarea>
                   </div>
                   
                   <Magnetic>
-                    <button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-500 text-black font-bold font-display py-4 rounded-lg text-[17.6px] transition-colors flex justify-center items-center gap-2 cursor-none mt-auto">
-                      Open Email Client <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                    <button type="submit" className="w-fit bg-gradient-to-r from-cyan-400 to-violet-500 hover:from-cyan-300 hover:to-violet-400 text-white font-bold font-display py-3 px-8 rounded-xl text-[17.6px] transition-all flex items-center gap-2 cursor-none shadow-[0_0_20px_rgba(34,211,238,0.4)] mt-4">
+                      Send Message 
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                     </button>
                   </Magnetic>
                 </form>
