@@ -40,6 +40,36 @@ const StyleInject = () => (
       color: #22d3ee;
       text-shadow: 2px 0 #8b5cf6, -2px 0 #ef4444;
     }
+
+    /* CUSTOM NEON SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #030303;
+      border-left: 1px solid #111;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, #22d3ee, #8b5cf6);
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(to bottom, #06b6d4, #7c3aed);
+    }
+
+    /* INFINITE MARQUEE ANIMATION */
+    @keyframes scrollMarquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-content {
+      display: flex;
+      width: 200%;
+      animation: scrollMarquee 25s linear infinite;
+    }
+    .marquee-content:hover {
+      animation-play-state: paused;
+    }
   `}} />
 );
 
@@ -203,6 +233,21 @@ const FlipImage = ({ src, alt, className }) => {
     </div>
   );
 };
+
+// --- INFINITE MARQUEE COMPONENT ---
+const TechMarquee = () => {
+  const techStack = ["Java", "Spring Boot", "MySQL", "React", "Tailwind CSS", "Vite", "Git", "GitHub", "Python", "C", "Gemini API", "REST APIs", "DSA", "Hibernate"];
+  return (
+    <div className="relative w-full overflow-hidden bg-gradient-to-r from-[#030303] via-[#0a0a0a] to-[#030303] border-y border-gray-800/50 py-5 z-20">
+      <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-transparent to-[#030303] w-full z-10 pointer-events-none"></div>
+      <div className="marquee-content flex gap-12 whitespace-nowrap text-cyan-500/40 font-mono text-xl font-bold uppercase tracking-widest cursor-none">
+        {[...techStack, ...techStack, ...techStack].map((tech, idx) => (
+          <span key={idx} className="inline-block hover:text-cyan-400 hover:drop-shadow-[0_0_10px_rgba(34,211,238,0.8)] transition-all duration-300">{tech} •</span>
+        ))}
+      </div>
+    </div>
+  );
+};
 // -------------------------------------------------------------
 
 export default function App() {
@@ -257,7 +302,7 @@ export default function App() {
   if (isLoading) return <TerminalLoader onComplete={() => setIsLoading(false)} />;
 
   return (
-    <div className="min-h-screen bg-[#030303] text-gray-300 font-sans selection:bg-cyan-500/30 overflow-x-hidden [&_*]:cursor-none cursor-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <div className="min-h-screen bg-[#030303] text-gray-300 font-sans selection:bg-cyan-500/30 overflow-x-hidden [&_*]:cursor-none cursor-none">
       <StyleInject />
       <div className="grain-overlay"></div>
 
@@ -271,6 +316,19 @@ export default function App() {
       >
         <div className="w-10 h-10 border-2 border-cyan-500/50 rounded-full absolute transition-transform ease-out duration-75"></div>
         <div className="w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee] transition-transform ease-out duration-75"></div>
+      </div>
+
+      {/* BACK TO TOP RADAR BUTTON */}
+      <div className={`fixed bottom-8 right-8 z-[90] transition-all duration-500 ${scrollY > 500 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
+        <Magnetic>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="w-14 h-14 bg-[#111] border border-gray-700 hover:border-cyan-400 rounded-full flex items-center justify-center group cursor-none shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+          >
+            <div className="absolute inset-0 rounded-full border border-cyan-500/0 group-hover:animate-ping group-hover:border-cyan-400/50"></div>
+            <svg className="w-6 h-6 text-cyan-400 transition-transform group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"></path></svg>
+          </button>
+        </Magnetic>
       </div>
 
       {/* NAVBAR */}
@@ -391,6 +449,11 @@ export default function App() {
              </div>
           </div>
         </section>
+
+        {/* INFINITE SCROLLING TECH MARQUEE */}
+        <Reveal>
+          <TechMarquee />
+        </Reveal>
 
         {/* ABOUT ME SECTION */}
         <Reveal>
@@ -631,6 +694,25 @@ export default function App() {
               </div>
 
             </div>
+
+            {/* LIVE GITHUB STATS ROW */}
+            <div className="grid md:grid-cols-2 gap-6 mt-12">
+              <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group cursor-none hover:border-cyan-500/50">
+                 <img
+                   src="https://github-readme-stats.vercel.app/api?username=soumya1708&show_icons=true&theme=transparent&hide_border=true&title_color=22d3ee&text_color=9ca3af&icon_color=8b5cf6&bg_color=0a0a0a"
+                   alt="GitHub Stats"
+                   className="w-full h-full object-contain p-4 opacity-80 group-hover:opacity-100 transition-opacity"
+                 />
+              </SpotlightCard>
+              <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group cursor-none hover:border-violet-500/50">
+                 <img
+                   src="https://github-readme-stats.vercel.app/api/top-langs/?username=soumya1708&layout=compact&theme=transparent&hide_border=true&title_color=8b5cf6&text_color=9ca3af&bg_color=0a0a0a"
+                   alt="Top Languages"
+                   className="w-full h-full object-contain p-4 opacity-80 group-hover:opacity-100 transition-opacity"
+                 />
+              </SpotlightCard>
+            </div>
+            
           </section>
         </Reveal>
 
