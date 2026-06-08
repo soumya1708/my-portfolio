@@ -699,16 +699,16 @@ export default function App() {
             <div className="grid md:grid-cols-2 gap-6 mt-12">
               <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group cursor-none hover:border-cyan-500/50">
                  <img
-                   src="https://github-readme-stats.vercel.app/api?username=soumya1708&show_icons=true&theme=transparent&hide_border=true&title_color=22d3ee&text_color=9ca3af&icon_color=8b5cf6&bg_color=0a0a0a"
-                   alt="GitHub Stats"
+                   src="https://streak-stats.demolab.com?user=soumya1708&theme=transparent&hide_border=true&ring=22d3ee&fire=8b5cf6&currStreakLabel=22d3ee"
+                   alt="GitHub Streak"
                    className="w-full h-full object-contain p-4 opacity-80 group-hover:opacity-100 transition-opacity"
                  />
               </SpotlightCard>
               <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group cursor-none hover:border-violet-500/50">
                  <img
-                   src="https://github-readme-stats.vercel.app/api/top-langs/?username=soumya1708&layout=compact&theme=transparent&hide_border=true&title_color=8b5cf6&text_color=9ca3af&bg_color=0a0a0a"
+                   src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=soumya1708&theme=transparent"
                    alt="Top Languages"
-                   className="w-full h-full object-contain p-4 opacity-80 group-hover:opacity-100 transition-opacity"
+                   className="w-full h-full object-contain p-2 opacity-80 group-hover:opacity-100 transition-opacity drop-shadow-[0_0_15px_rgba(139,92,246,0.2)]"
                  />
               </SpotlightCard>
             </div>
