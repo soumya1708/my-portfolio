@@ -734,51 +734,15 @@ export default function App() {
             <div className="grid md:grid-cols-2 gap-6 pt-4">
               
               {/* LeetCode Detailed Card */}
-              <SpotlightCard className="p-0 group cursor-none hover:border-yellow-500/50">
-                <a href="https://leetcode.com/u/Shiro_Oni1708/" target="_blank" rel="noreferrer" className="block p-8 h-full flex flex-col justify-between cursor-none">
-                  <div>
-                    <div className="flex justify-between items-center mb-6">
-                      <h4 className="text-2xl font-bold font-display text-white flex items-center gap-3">
-                        <svg className="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.939 5.939 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.001-1.955a1.378 1.378 0 0 0-1.951-.001l-2.396 2.392a2.921 2.921 0 0 1-4.034.037l-.032-.032-4.246-4.162a3.176 3.176 0 0 1-.682-.976 3.298 3.298 0 0 1-.186-.543 3.396 3.396 0 0 1-.035-1.285 3.181 3.181 0 0 1 .655-1.144l3.702-3.96 5.166-5.523a1.375 1.375 0 0 0-.062-1.957l-3.527-3.393A1.375 1.375 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.383h7.942c.762 0 1.38-.621 1.38-1.383a1.38 1.38 0 0 0-1.38-1.382H10.617z"/></svg>
-                        LeetCode
-                      </h4>
-                      <span className="text-gray-400 text-[15.4px] font-mono">@Shiro_Oni1708</span>
-                    </div>
-                    
-                    <div className="flex gap-6 mb-8 text-[15.4px]">
-                      <div>
-                        <p className="text-gray-500 uppercase tracking-widest text-[11px] mb-1">Global Rank</p>
-                        <p className="text-white font-mono font-medium">1,254,772</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500 uppercase tracking-widest text-[11px] mb-1">Contest Rating</p>
-                        <p className="text-white font-mono font-medium">1,470</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-end justify-between border-t border-gray-800 pt-6">
-                      <div>
-                        <p className="text-5xl font-black font-display text-white leading-none">126</p>
-                        <p className="text-[15.4px] text-gray-500 mt-2 font-medium">Total Problems Solved</p>
-                      </div>
-                      <div className="text-right space-y-1 text-[13.2px] font-mono">
-                        <p className="text-cyan-400">Easy: 110</p>
-                        <p className="text-yellow-500">Med: 15</p>
-                        <p className="text-red-500">Hard: 1</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6 p-4 bg-[#111] border border-gray-800 rounded-xl flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#1a1a1a] rounded-lg border border-gray-700 flex items-center justify-center text-green-500 shadow-[0_0_10px_rgba(34,197,94,0.2)]">
-                       <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l8.66 5v10L12 22l-8.66-5V7L12 2z"></path></svg>
-                    </div>
-                    <div>
-                      <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Recent Badge</p>
-                      <p className="text-white text-[15.4px] font-bold">50 Days Badge 2026</p>
-                    </div>
-                  </div>
-                </a>
+              {/* LIVE LEETCODE STATS CARD */}
+              <SpotlightCard className="p-1 h-full min-h-[220px] flex items-center justify-center group cursor-none hover:border-yellow-500/50 w-full overflow-hidden bg-[#0a0a0a]">
+                 <a href="https://leetcode.com/u/Shiro_Oni1708/" target="_blank" rel="noreferrer" className="w-full h-full cursor-none flex items-center justify-center">
+                   <img
+                     src="https://leetcard.jacoblin.cool/Shiro_Oni1708?theme=dark&font=Space%20Grotesk&ext=heatmap"
+                     alt="Live LeetCode Stats"
+                     className="w-full h-full object-contain p-2 opacity-90 group-hover:opacity-100 transition-opacity"
+                   />
+                 </a>
               </SpotlightCard>
 
               {/* HackerRank Detailed Card */}
