@@ -372,36 +372,41 @@ export default function App() {
       <main className="relative z-10 max-w-5xl mx-auto px-6 pt-32 pb-24 space-y-32" style={{ scrollBehavior: 'smooth' }}>
         
         {/* HERO SECTION */}
-        <section id="home" className="relative flex flex-col items-center justify-center min-h-[85vh]">
-          <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12 w-full">
-            <div className="flex-1 space-y-6">
+        <section id="home" className="relative flex flex-col items-center justify-center min-h-[85vh] w-full overflow-hidden md:overflow-visible">
+          <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12 w-full max-w-full">
+            
+            {/* Added min-w-0 to fix the Flexbox blowout caused by the wide buttons */}
+            <div className="flex-1 space-y-6 min-w-0 w-full">
               
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 text-cyan-400 text-[13.2px] font-semibold rounded-full border border-cyan-500/20 mb-4 font-mono shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 text-cyan-400 text-[13.2px] font-semibold rounded-full border border-cyan-500/20 mb-4 font-mono shadow-[0_0_15px_rgba(6,182,212,0.15)] w-fit">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                 OPEN TO OPPORTUNITIES
               </div>
 
               {/* TYPING ANIMATION HEADERS */}
-              <div className="space-y-3">
+              <div className="space-y-3 min-w-0 w-full">
                 <p className="text-[22px] md:text-[26.4px] text-cyan-400 font-mono tracking-tight">
                   Hi I am ..
                 </p>
                 
-                <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-7xl font-black font-display text-white tracking-tighter min-h-[1.2em] whitespace-nowrap drop-shadow-md">
+                {/* Removed whitespace-nowrap so long names wrap perfectly on small screens */}
+                <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-7xl font-black font-display text-white tracking-tighter min-h-[1.2em] drop-shadow-md break-words">
                   <Typewriter text="Soumya Mondal" speed={100} delay={200} loop={false} />
                 </h1>
                 
-                <h2 className="text-lg md:text-xl lg:text-2xl font-light text-gray-400 border-l-2 border-cyan-500/50 pl-4 min-h-[1.5em] flex items-center">
+                {/* Allowed normal wrapping instead of forcing a single flex line */}
+                <h2 className="text-lg md:text-xl lg:text-2xl font-light text-gray-400 border-l-2 border-cyan-500/50 pl-4 min-h-[1.5em] block w-full">
                   <Typewriter text="DSA Enthusiast | Backend Developer | Java & Spring Boot" speed={60} delay={1800} loop={true} />
                 </h2>
               </div>
 
-              <p className="text-gray-400 max-w-lg text-[17.6px] leading-relaxed pt-2 animate-[fadeIn_1s_ease-out_2s_both]">
+              <p className="text-gray-400 max-w-lg text-[17.6px] leading-relaxed pt-2 animate-[fadeIn_1s_ease-out_2s_both] w-full">
                 Engineering student building reliable applications from frontend interfaces to backend APIs. Focused on clean code, database architectures, and real-world system implementations.
               </p>
               
               {/* ACTION BUTTONS */}
-              <div className="flex flex-row items-center gap-3 md:gap-4 pt-4 relative z-20 w-full overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] whitespace-nowrap animate-[fadeIn_1s_ease-out_2.5s_both]">
+              {/* Added max-w-full to ensure internal scrolling happens correctly */}
+              <div className="flex flex-row items-center gap-3 md:gap-4 pt-4 relative z-20 w-full max-w-full overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] whitespace-nowrap animate-[fadeIn_1s_ease-out_2.5s_both]">
                 <Magnetic>
                   <a href="#projects" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-black font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none shadow-[0_0_20px_rgba(6,182,212,0.3)]">
                     View Projects <span>↓</span>
@@ -428,7 +433,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="flex-1 flex justify-center md:justify-end shrink-0">
+            <div className="flex-1 flex justify-center md:justify-end shrink-0 w-full min-w-0 mt-8 md:mt-0">
               <div className="relative w-72 h-72 md:w-[420px] md:h-[420px] rounded-full p-2 overflow-hidden shadow-[0_0_80px_rgba(6,182,212,0.15)] bg-[#050505]">
                 <div className="absolute inset-0 rounded-full border border-gray-800"></div>
                 <div className="absolute inset-[-10px] rounded-full border-t-2 border-r-2 border-cyan-400 border-l-2 border-l-violet-500 animate-[spin_8s_linear_infinite] opacity-50"></div>
