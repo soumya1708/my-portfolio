@@ -15,12 +15,18 @@ const StyleInject = () => (
   <style dangerouslySetInnerHTML={{__html: `
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700;900&display=swap');
     
+    html, body {
+      overflow-x: hidden !important;
+      width: 100%;
+      position: relative;
+    }
+    
     .font-sans { font-family: 'Inter', sans-serif; }
     .font-display { font-family: 'Space Grotesk', sans-serif; }
     
     .grain-overlay {
       position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
+      top: 0; left: 0; width: 100%; height: 100%;
       pointer-events: none;
       z-index: 9999;
       opacity: 0.04;
@@ -302,7 +308,7 @@ export default function App() {
   if (isLoading) return <TerminalLoader onComplete={() => setIsLoading(false)} />;
 
   return (
-    <div className="min-h-screen bg-[#030303] text-gray-300 font-sans selection:bg-cyan-500/30 overflow-x-hidden [&_*]:cursor-none cursor-none">
+    <div className="min-h-screen bg-[#030303] text-gray-300 font-sans selection:bg-cyan-500/30 overflow-x-hidden w-full max-w-[100vw] [&_*]:cursor-none cursor-none">
       <StyleInject />
       <div className="grain-overlay"></div>
 
@@ -372,11 +378,10 @@ export default function App() {
       <main className="relative z-10 max-w-5xl mx-auto px-6 pt-32 pb-24 space-y-32" style={{ scrollBehavior: 'smooth' }}>
         
         {/* HERO SECTION */}
-        <section id="home" className="relative flex flex-col items-center justify-center min-h-[85vh] w-full overflow-hidden md:overflow-visible">
-          <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12 w-full max-w-full">
+        <section id="home" className="relative flex flex-col items-center justify-center min-h-[85vh] w-full mt-10 md:mt-0">
+          <div className="flex flex-col-reverse md:flex-row items-start md:items-center justify-between gap-12 md:gap-8 w-full max-w-full">
             
-            {/* Added min-w-0 to fix the Flexbox blowout caused by the wide buttons */}
-            <div className="flex-1 space-y-6 min-w-0 w-full">
+            <div className="flex-1 space-y-6 w-full min-w-0">
               
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 text-cyan-400 text-[13.2px] font-semibold rounded-full border border-cyan-500/20 mb-4 font-mono shadow-[0_0_15px_rgba(6,182,212,0.15)] w-fit">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -389,12 +394,10 @@ export default function App() {
                   Hi I am ..
                 </p>
                 
-                {/* Removed whitespace-nowrap so long names wrap perfectly on small screens */}
-                <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-7xl font-black font-display text-white tracking-tighter min-h-[1.2em] drop-shadow-md break-words">
+                <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-7xl font-black font-display text-white tracking-tighter min-h-[1.2em] break-words drop-shadow-md">
                   <Typewriter text="Soumya Mondal" speed={100} delay={200} loop={false} />
                 </h1>
                 
-                {/* Allowed normal wrapping instead of forcing a single flex line */}
                 <h2 className="text-lg md:text-xl lg:text-2xl font-light text-gray-400 border-l-2 border-cyan-500/50 pl-4 min-h-[1.5em] block w-full">
                   <Typewriter text="DSA Enthusiast | Backend Developer | Java & Spring Boot" speed={60} delay={1800} loop={true} />
                 </h2>
@@ -404,9 +407,8 @@ export default function App() {
                 Engineering student building reliable applications from frontend interfaces to backend APIs. Focused on clean code, database architectures, and real-world system implementations.
               </p>
               
-              {/* ACTION BUTTONS */}
-              {/* Added max-w-full to ensure internal scrolling happens correctly */}
-              <div className="flex flex-row items-center gap-3 md:gap-4 pt-4 relative z-20 w-full max-w-full overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] whitespace-nowrap animate-[fadeIn_1s_ease-out_2.5s_both]">
+              {/* ACTION BUTTONS (Flex-wrap applied to stop mobile cutoff) */}
+              <div className="flex flex-row flex-wrap items-center gap-3 md:gap-4 pt-4 relative z-20 w-full pb-4 animate-[fadeIn_1s_ease-out_2.5s_both]">
                 <Magnetic>
                   <a href="#projects" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-black font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none shadow-[0_0_20px_rgba(6,182,212,0.3)]">
                     View Projects <span>↓</span>
@@ -434,7 +436,7 @@ export default function App() {
             </div>
 
             <div className="flex-1 flex justify-center md:justify-end shrink-0 w-full min-w-0 mt-8 md:mt-0">
-              <div className="relative w-72 h-72 md:w-[420px] md:h-[420px] rounded-full p-2 overflow-hidden shadow-[0_0_80px_rgba(6,182,212,0.15)] bg-[#050505]">
+              <div className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[420px] md:h-[420px] rounded-full p-2 overflow-hidden shadow-[0_0_80px_rgba(6,182,212,0.15)] bg-[#050505] mx-auto md:mx-0">
                 <div className="absolute inset-0 rounded-full border border-gray-800"></div>
                 <div className="absolute inset-[-10px] rounded-full border-t-2 border-r-2 border-cyan-400 border-l-2 border-l-violet-500 animate-[spin_8s_linear_infinite] opacity-50"></div>
                 <FlipImage 
@@ -701,15 +703,15 @@ export default function App() {
             </div>
 
             {/* LIVE GITHUB STATS ROW */}
-            <div className="grid md:grid-cols-2 gap-6 mt-12">
-              <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group cursor-none hover:border-cyan-500/50">
+            <div className="grid md:grid-cols-2 gap-6 mt-12 w-full">
+              <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group cursor-none hover:border-cyan-500/50 w-full overflow-hidden">
                  <img
                    src="https://streak-stats.demolab.com?user=soumya1708&theme=transparent&hide_border=true&ring=22d3ee&fire=8b5cf6&currStreakLabel=22d3ee"
                    alt="GitHub Streak"
                    className="w-full h-full object-contain p-4 opacity-80 group-hover:opacity-100 transition-opacity"
                  />
               </SpotlightCard>
-              <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group cursor-none hover:border-violet-500/50">
+              <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group cursor-none hover:border-violet-500/50 w-full overflow-hidden">
                  <img
                    src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=soumya1708&theme=transparent"
                    alt="Top Languages"
@@ -733,7 +735,6 @@ export default function App() {
             
             <div className="grid md:grid-cols-2 gap-6 pt-4">
               
-              {/* LeetCode Detailed Card */}
               {/* LIVE LEETCODE STATS CARD */}
               <SpotlightCard className="p-1 h-full min-h-[220px] flex items-center justify-center group cursor-none hover:border-yellow-500/50 w-full overflow-hidden bg-[#0a0a0a]">
                  <a href="https://leetcode.com/u/Shiro_Oni1708/" target="_blank" rel="noreferrer" className="w-full h-full cursor-none flex items-center justify-center">
