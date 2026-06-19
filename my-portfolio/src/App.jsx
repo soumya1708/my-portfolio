@@ -246,7 +246,7 @@ const TechMarquee = () => {
   return (
     <div className="relative w-full overflow-hidden bg-gradient-to-r from-[#030303] via-[#0a0a0a] to-[#030303] border-y border-gray-800/50 py-5 z-20">
       <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-transparent to-[#030303] w-full z-10 pointer-events-none"></div>
-      <div className="marquee-content flex gap-12 whitespace-nowrap text-cyan-500/40 font-mono text-xl font-bold uppercase tracking-widest cursor-none">
+      <div className="marquee-content flex gap-12 whitespace-nowrap text-cyan-500/40 font-mono text-xl font-bold uppercase tracking-widest">
         {[...techStack, ...techStack, ...techStack].map((tech, idx) => (
           <span key={idx} className="inline-block hover:text-cyan-400 hover:drop-shadow-[0_0_10px_rgba(34,211,238,0.8)] transition-all duration-300">{tech} •</span>
         ))}
@@ -258,7 +258,6 @@ const TechMarquee = () => {
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrollY, setScrollY] = useState(0);
   const [activeSection, setActiveSection] = useState('home');
@@ -269,8 +268,6 @@ export default function App() {
   const closeModal = () => setSelectedImage(null);
 
   useEffect(() => {
-    const updateMousePosition = (e) => setMousePosition({ x: e.clientX, y: e.clientY });
-    
     const handleScroll = () => {
       setScrollY(window.scrollY);
       const totalScroll = document.documentElement.scrollTop;
@@ -288,10 +285,8 @@ export default function App() {
     }, { threshold: 0.3 });
     document.querySelectorAll('section').forEach(sec => observer.observe(sec));
 
-    window.addEventListener('mousemove', updateMousePosition);
     window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener('mousemove', updateMousePosition);
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
     };
@@ -308,28 +303,19 @@ export default function App() {
   if (isLoading) return <TerminalLoader onComplete={() => setIsLoading(false)} />;
 
   return (
-    <div className="min-h-screen bg-[#030303] text-gray-300 font-sans selection:bg-cyan-500/30 overflow-x-hidden w-full max-w-[100vw] [&_*]:cursor-none cursor-none">
+    <div className="min-h-screen bg-[#030303] text-gray-300 font-sans selection:bg-cyan-500/30 overflow-x-hidden w-full max-w-[100vw]">
       <StyleInject />
       <div className="grain-overlay"></div>
 
       {/* TOP SCROLL PROGRESS BAR */}
       <div className="fixed top-0 left-0 h-1 bg-gradient-to-r from-cyan-400 to-violet-500 z-[100] transition-all duration-150 ease-out" style={{ width: scrollProgress }}></div>
 
-      {/* CUSTOM RADAR CURSOR */}
-      <div 
-        className="fixed top-0 left-0 pointer-events-none z-[100] transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center hidden md:flex"
-        style={{ transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)` }}
-      >
-        <div className="w-10 h-10 border-2 border-cyan-500/50 rounded-full absolute transition-transform ease-out duration-75"></div>
-        <div className="w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee] transition-transform ease-out duration-75"></div>
-      </div>
-
       {/* BACK TO TOP RADAR BUTTON */}
       <div className={`fixed bottom-8 right-8 z-[90] transition-all duration-500 ${scrollY > 500 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
         <Magnetic>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-14 h-14 bg-[#111] border border-gray-700 hover:border-cyan-400 rounded-full flex items-center justify-center group cursor-none shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+            className="w-14 h-14 bg-[#111] border border-gray-700 hover:border-cyan-400 rounded-full flex items-center justify-center group shadow-[0_0_20px_rgba(0,0,0,0.5)]"
           >
             <div className="absolute inset-0 rounded-full border border-cyan-500/0 group-hover:animate-ping group-hover:border-cyan-400/50"></div>
             <svg className="w-6 h-6 text-cyan-400 transition-transform group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"></path></svg>
@@ -341,20 +327,20 @@ export default function App() {
       <nav className="fixed top-0 w-full z-50 bg-[#030303]/80 backdrop-blur-md border-b border-gray-800/50 mt-1">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center text-[15.4px] font-medium">
           <Magnetic>
-            <div className="flex items-center gap-2 cursor-none hover-glitch">
+            <div className="flex items-center gap-2 hover-glitch">
               <span className="text-cyan-400 font-mono text-[17.6px]">{`>_`}</span>
               <span className="text-white font-bold text-lg font-display tracking-tighter">Soumya.Dev</span>
             </div>
           </Magnetic>
           <div className="hidden md:flex gap-8 text-gray-400 font-display">
-            <Magnetic><a href="#home" className={`${activeSection === 'home' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300 cursor-none`}>Home</a></Magnetic>
-            <Magnetic><a href="#about" className={`${activeSection === 'about' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300 cursor-none`}>About</a></Magnetic>
-            <Magnetic><a href="#education" className={`${activeSection === 'education' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300 cursor-none`}>Education</a></Magnetic>
-            <Magnetic><a href="#mastery" className={`${activeSection === 'mastery' || activeSection === 'cp' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300 cursor-none`}>Skills</a></Magnetic>
-            <Magnetic><a href="#projects" className={`${activeSection === 'projects' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300 cursor-none`}>Projects</a></Magnetic>
+            <Magnetic><a href="#home" className={`${activeSection === 'home' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>Home</a></Magnetic>
+            <Magnetic><a href="#about" className={`${activeSection === 'about' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>About</a></Magnetic>
+            <Magnetic><a href="#education" className={`${activeSection === 'education' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>Education</a></Magnetic>
+            <Magnetic><a href="#mastery" className={`${activeSection === 'mastery' || activeSection === 'cp' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>Skills</a></Magnetic>
+            <Magnetic><a href="#projects" className={`${activeSection === 'projects' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>Projects</a></Magnetic>
           </div>
           <Magnetic>
-            <a href="#contact" className="bg-white text-black px-5 py-2 rounded-md font-bold font-display hover:bg-cyan-400 hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] cursor-none">
+            <a href="#contact" className="bg-white text-black px-5 py-2 rounded-md font-bold font-display hover:bg-cyan-400 hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
               Hire Me
             </a>
           </Magnetic>
@@ -410,24 +396,24 @@ export default function App() {
               {/* ACTION BUTTONS (Flex-wrap applied to stop mobile cutoff) */}
               <div className="flex flex-row flex-wrap items-center gap-3 md:gap-4 pt-4 relative z-20 w-full pb-4 animate-[fadeIn_1s_ease-out_2.5s_both]">
                 <Magnetic>
-                  <a href="#projects" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-black font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                  <a href="#projects" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-black font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
                     View Projects <span>↓</span>
                   </a>
                 </Magnetic>
                 <Magnetic>
-                  <a href="https://github.com/soumya1708" target="_blank" rel="noreferrer" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-cyan-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none">
+                  <a href="https://github.com/soumya1708" target="_blank" rel="noreferrer" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-cyan-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
                     GitHub
                   </a>
                 </Magnetic>
                 <Magnetic>
-                  <a href="https://www.linkedin.com/in/soumya-mondal-1b5030384" target="_blank" rel="noreferrer" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-violet-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none">
+                  <a href="https://www.linkedin.com/in/soumya-mondal-1b5030384" target="_blank" rel="noreferrer" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-violet-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" /></svg>
                     LinkedIn
                   </a>
                 </Magnetic>
                 <Magnetic>
-                  <a href="#contact" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-red-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 cursor-none">
+                  <a href="#contact" className="px-5 md:px-6 py-3 bg-[#111] border border-gray-800 hover:border-red-500/50 rounded-lg text-white font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     Email
                   </a>
@@ -704,14 +690,14 @@ export default function App() {
 
             {/* LIVE GITHUB STATS ROW */}
             <div className="grid md:grid-cols-2 gap-6 mt-12 w-full">
-              <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group cursor-none hover:border-cyan-500/50 w-full overflow-hidden">
+              <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group hover:border-cyan-500/50 w-full overflow-hidden">
                  <img
                    src="https://streak-stats.demolab.com?user=soumya1708&theme=transparent&hide_border=true&ring=22d3ee&fire=8b5cf6&currStreakLabel=22d3ee"
                    alt="GitHub Streak"
                    className="w-full h-full object-contain p-4 opacity-80 group-hover:opacity-100 transition-opacity"
                  />
               </SpotlightCard>
-              <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group cursor-none hover:border-violet-500/50 w-full overflow-hidden">
+              <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group hover:border-violet-500/50 w-full overflow-hidden">
                  <img
                    src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=soumya1708&theme=transparent"
                    alt="Top Languages"
@@ -736,8 +722,8 @@ export default function App() {
             <div className="grid md:grid-cols-2 gap-6 pt-4">
               
               {/* LIVE LEETCODE STATS CARD */}
-              <SpotlightCard className="p-1 h-full min-h-[220px] flex items-center justify-center group cursor-none hover:border-yellow-500/50 w-full overflow-hidden bg-[#0a0a0a]">
-                 <a href="https://leetcode.com/u/Shiro_Oni1708/" target="_blank" rel="noreferrer" className="w-full h-full cursor-none flex items-center justify-center">
+              <SpotlightCard className="p-1 h-full min-h-[220px] flex items-center justify-center group hover:border-yellow-500/50 w-full overflow-hidden bg-[#0a0a0a]">
+                 <a href="https://leetcode.com/u/Shiro_Oni1708/" target="_blank" rel="noreferrer" className="w-full h-full flex items-center justify-center">
                    <img
                      src="https://leetcard.jacoblin.cool/Shiro_Oni1708?theme=dark&font=Space%20Grotesk&ext=heatmap"
                      alt="Live LeetCode Stats"
@@ -747,8 +733,8 @@ export default function App() {
               </SpotlightCard>
 
               {/* HackerRank Detailed Card */}
-              <SpotlightCard className="p-0 group cursor-none hover:border-green-500/50">
-                <a href="https://www.hackerrank.com/profile/soumya_mondal171" target="_blank" rel="noreferrer" className="block p-8 h-full flex flex-col justify-between cursor-none">
+              <SpotlightCard className="p-0 group hover:border-green-500/50">
+                <a href="https://www.hackerrank.com/profile/soumya_mondal171" target="_blank" rel="noreferrer" className="block p-8 h-full flex flex-col justify-between">
                   <div>
                     <div className="flex justify-between items-center mb-6">
                       <h4 className="text-2xl font-bold font-display text-white flex items-center gap-3">
@@ -838,7 +824,7 @@ export default function App() {
                   </div>
 
                   <Magnetic>
-                    <a href="https://github.com/soumya1708/Sanjeevani" target="_blank" rel="noreferrer" className="inline-flex justify-center items-center gap-2 px-5 py-3 bg-cyan-600/10 text-cyan-400 font-bold text-[15.4px] font-display tracking-wide uppercase rounded-lg hover:bg-cyan-500 hover:text-black transition-colors cursor-none border border-cyan-500/20 w-full md:w-auto">
+                    <a href="https://github.com/soumya1708/Sanjeevani" target="_blank" rel="noreferrer" className="inline-flex justify-center items-center gap-2 px-5 py-3 bg-cyan-600/10 text-cyan-400 font-bold text-[15.4px] font-display tracking-wide uppercase rounded-lg hover:bg-cyan-500 hover:text-black transition-colors border border-cyan-500/20 w-full md:w-auto">
                        Visit Project
                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
@@ -865,15 +851,15 @@ export default function App() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {certificateList.map((cert, index) => (
                 <SpotlightCard key={index} className="p-4 hover:border-violet-500/50">
-                  <div className="overflow-hidden rounded-lg border border-gray-800 mb-4 h-48 relative group">
+                  <div className="overflow-hidden rounded-lg border border-gray-800 mb-4 h-48 relative group cursor-pointer">
                     <img 
                       src={cert.image} 
                       alt={`Certificate ${index + 1}`} 
-                      className="w-full h-full object-cover object-center cursor-none transition-transform hover:scale-105 duration-500"
+                      className="w-full h-full object-cover object-center transition-transform hover:scale-105 duration-500"
                       onClick={() => openModal(cert.image)}
                     />
                     <div 
-                      className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-none"
+                      className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                       onClick={() => openModal(cert.image)}
                     >
                        <svg className="w-8 h-8 text-white drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
@@ -912,7 +898,7 @@ export default function App() {
 
                 <div className="space-y-4">
                   <Magnetic>
-                    <a href="mailto:soumya.mondal1708@gmail.com" className="flex items-center gap-5 p-4 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-cyan-500 transition-colors group cursor-none">
+                    <a href="mailto:soumya.mondal1708@gmail.com" className="flex items-center gap-5 p-4 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-cyan-500 transition-colors group">
                       <div className="w-14 h-14 bg-[#111] border border-gray-800 rounded-xl flex items-center justify-center group-hover:bg-cyan-500/10 transition-colors">
                          <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                       </div>
@@ -924,7 +910,7 @@ export default function App() {
                   </Magnetic>
 
                   <Magnetic>
-                    <a href="tel:8158056468" className="flex items-center gap-5 p-4 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-violet-500 transition-colors group cursor-none">
+                    <a href="tel:8158056468" className="flex items-center gap-5 p-4 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-2xl hover:border-violet-500 transition-colors group">
                       <div className="w-14 h-14 bg-[#111] border border-gray-800 rounded-xl flex items-center justify-center group-hover:bg-violet-500/10 transition-colors">
                          <svg className="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                       </div>
@@ -950,26 +936,26 @@ export default function App() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-[13.2px] font-mono text-gray-400 uppercase tracking-widest mb-2">Your Name</label>
-                      <input type="text" name="name" required placeholder="e.g. Neha Singh" className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
+                      <input type="text" name="name" required placeholder="e.g. Neha Singh" className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors" />
                     </div>
                     <div>
                       <label className="block text-[13.2px] font-mono text-gray-400 uppercase tracking-widest mb-2">Email Address</label>
-                      <input type="email" name="email" required placeholder="e.g. abc@gmail.com" className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
+                      <input type="email" name="email" required placeholder="e.g. abc@gmail.com" className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors" />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-[13.2px] font-mono text-gray-400 uppercase tracking-widest mb-2">Contact Number</label>
-                    <input type="tel" name="phone" placeholder="e.g. +91 XXXXX XXXXX" className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none" />
+                    <input type="tel" name="phone" placeholder="e.g. +91 XXXXX XXXXX" className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors" />
                   </div>
 
                   <div>
                     <label className="block text-[13.2px] font-mono text-gray-400 uppercase tracking-widest mb-2">Your Message</label>
-                    <textarea name="message" required rows="4" placeholder="e.g. I'd love to collaborate on a project with you..." className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors cursor-none"></textarea>
+                    <textarea name="message" required rows="4" placeholder="e.g. I'd love to collaborate on a project with you..." className="w-full bg-[#13131f] border border-gray-800 rounded-lg p-4 text-white text-[17.6px] focus:outline-none focus:border-cyan-500 transition-colors"></textarea>
                   </div>
                   
                   <Magnetic>
-                    <button type="submit" className="w-fit bg-gradient-to-r from-cyan-400 to-violet-500 hover:from-cyan-300 hover:to-violet-400 text-white font-bold font-display py-3 px-8 rounded-xl text-[17.6px] transition-all flex items-center gap-2 cursor-none shadow-[0_0_20px_rgba(34,211,238,0.4)] mt-4">
+                    <button type="submit" className="w-fit bg-gradient-to-r from-cyan-400 to-violet-500 hover:from-cyan-300 hover:to-violet-400 text-white font-bold font-display py-3 px-8 rounded-xl text-[17.6px] transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(34,211,238,0.4)] mt-4">
                       Send Message 
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                     </button>
@@ -999,13 +985,13 @@ export default function App() {
 
             <div className="flex gap-4">
               <Magnetic>
-                <a href="https://github.com/soumya1708" target="_blank" rel="noreferrer" className="p-3 bg-[#111] border border-gray-800 rounded-lg hover:border-cyan-500/50 hover:text-white transition-colors cursor-none block">
+                <a href="https://github.com/soumya1708" target="_blank" rel="noreferrer" className="p-3 bg-[#111] border border-gray-800 rounded-lg hover:border-cyan-500/50 hover:text-white transition-colors block">
                   <span className="sr-only">GitHub</span>
                   <svg className="w-5 h-5 text-current" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
                 </a>
               </Magnetic>
               <Magnetic>
-                <a href="https://www.linkedin.com/in/soumya-mondal-1b5030384" target="_blank" rel="noreferrer" className="p-3 bg-[#111] border border-gray-800 rounded-lg hover:border-violet-500/50 hover:text-white transition-colors cursor-none block">
+                <a href="https://www.linkedin.com/in/soumya-mondal-1b5030384" target="_blank" rel="noreferrer" className="p-3 bg-[#111] border border-gray-800 rounded-lg hover:border-violet-500/50 hover:text-white transition-colors block">
                    <span className="sr-only">LinkedIn</span>
                    <svg className="w-5 h-5 text-current" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" /></svg>
                 </a>
@@ -1019,7 +1005,7 @@ export default function App() {
       {/* LIGHTBOX (MODAL) VIEW */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4 backdrop-blur-sm cursor-none"
+          className="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
           onClick={closeModal} 
         >
           <img 
@@ -1030,7 +1016,7 @@ export default function App() {
           />
           <Magnetic>
             <button 
-              className="absolute top-6 right-6 p-4 bg-[#111] rounded-full text-white hover:bg-red-500 hover:text-white transition-colors cursor-none border border-gray-700 shadow-xl"
+              className="absolute top-6 right-6 p-4 bg-[#111] rounded-full text-white hover:bg-red-500 hover:text-white transition-colors border border-gray-700 shadow-xl"
               onClick={closeModal}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
