@@ -246,12 +246,99 @@ const TechMarquee = () => {
   return (
     <div className="relative w-full overflow-hidden bg-gradient-to-r from-[#030303] via-[#0a0a0a] to-[#030303] border-y border-gray-800/50 py-5 z-20">
       <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-transparent to-[#030303] w-full z-10 pointer-events-none"></div>
-      <div className="marquee-content flex gap-12 whitespace-nowrap text-cyan-500/40 font-mono text-xl font-bold uppercase tracking-widest">
+      <div className="marquee-content flex gap-12 whitespace-nowrap text-cyan-500/40 font-mono text-xl font-bold uppercase tracking-widest cursor-none">
         {[...techStack, ...techStack, ...techStack].map((tech, idx) => (
           <span key={idx} className="inline-block hover:text-cyan-400 hover:drop-shadow-[0_0_10px_rgba(34,211,238,0.8)] transition-all duration-300">{tech} •</span>
         ))}
       </div>
     </div>
+  );
+};
+
+// --- INTERACTIVE TERMINAL COMPONENT ---
+const InteractiveTerminal = () => {
+  const [history, setHistory] = useState([
+    { cmd: '', output: 'Initializing SoumyaOS v1.0.0...' },
+    { cmd: '', output: 'Connection secured. Type "help" to see available commands.' }
+  ]);
+  const [input, setInput] = useState('');
+  const bottomRef = useRef(null);
+
+  const handleCommand = (e) => {
+    if (e.key === 'Enter') {
+      const cmd = input.trim().toLowerCase();
+      if (!cmd) return;
+
+      let output = '';
+      switch(cmd) {
+        case 'help': 
+          output = 'Available commands: \n  whoami    - Display developer profile\n  skills    - List technical stack\n  projects  - View active repositories\n  clear     - Clear terminal window\n  sudo      - Execute command as superuser'; 
+          break;
+        case 'whoami': 
+          output = 'Soumya Mondal\nRole: Backend Developer & DSA Enthusiast\nStatus: Seeking Opportunities'; 
+          break;
+        case 'skills': 
+          output = '[Backend]: Java, Spring Boot, MySQL, REST APIs, Hibernate\n[Frontend]: React, Tailwind CSS\n[Core]: Data Structures & Algorithms, C, Python'; 
+          break;
+        case 'projects': 
+          output = '1. Sanjeevani (Med-Tech Matching System)\n2. VolunteerConnect (Social Impact)\n3. Read & Rant (E-commerce Platform)\n\nType "projects" to view the live dashboard below.'; 
+          break;
+        case 'sudo': 
+          output = 'bash: sudo: nice try, but you do not have root privileges on this portfolio.'; 
+          break;
+        case 'clear': 
+          setHistory([]); 
+          setInput(''); 
+          return;
+        default: 
+          output = `bash: command not found: ${cmd}. Type "help" for valid commands.`;
+      }
+      
+      setHistory(prev => [...prev, { cmd, output }]);
+      setInput('');
+      setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+    }
+  };
+
+  return (
+    <section id="console" className="space-y-8 relative z-20 pt-16">
+      <h3 className="text-4xl md:text-5xl font-bold font-display text-white flex items-center gap-4 mb-8">
+        <span className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20 text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M4 17h16a2 2 0 002-2V9a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+        </span>
+        Developer Console
+      </h3>
+      
+      <SpotlightCard className="w-full h-[350px] md:h-[400px] flex flex-col font-mono text-[13.2px] md:text-[15.4px] border border-gray-800 rounded-xl overflow-hidden shadow-2xl p-0 cursor-text">
+        <div className="bg-[#111] p-3 flex gap-2 border-b border-gray-800 items-center">
+           <div className="w-3 h-3 rounded-full bg-red-500"></div>
+           <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+           <div className="w-3 h-3 rounded-full bg-green-500"></div>
+           <span className="text-gray-500 text-xs ml-4 tracking-widest font-bold">soumya@dev:~</span>
+        </div>
+        <div className="p-4 flex-1 overflow-y-auto bg-[#050505] text-gray-300 space-y-3 [&::-webkit-scrollbar]:hidden">
+           {history.map((line, i) => (
+             <div key={i}>
+               {line.cmd && <div className="text-cyan-400"><span className="text-violet-500 mr-2">soumya@dev:~$</span>{line.cmd}</div>}
+               <div className="whitespace-pre-wrap mt-1 text-gray-400">{line.output}</div>
+             </div>
+           ))}
+           <div className="flex items-center text-cyan-400 mt-2">
+             <span className="text-violet-500 mr-2">soumya@dev:~$</span>
+             <input
+               type="text"
+               value={input}
+               onChange={(e) => setInput(e.target.value)}
+               onKeyDown={handleCommand}
+               className="flex-1 bg-transparent border-none outline-none text-cyan-400 font-mono"
+               spellCheck="false"
+               autoComplete="off"
+             />
+           </div>
+           <div ref={bottomRef}></div>
+        </div>
+      </SpotlightCard>
+    </section>
   );
 };
 // -------------------------------------------------------------
@@ -335,8 +422,8 @@ export default function App() {
           <div className="hidden md:flex gap-8 text-gray-400 font-display">
             <Magnetic><a href="#home" className={`${activeSection === 'home' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>Home</a></Magnetic>
             <Magnetic><a href="#about" className={`${activeSection === 'about' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>About</a></Magnetic>
-            <Magnetic><a href="#education" className={`${activeSection === 'education' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>Education</a></Magnetic>
             <Magnetic><a href="#mastery" className={`${activeSection === 'mastery' || activeSection === 'cp' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>Skills</a></Magnetic>
+            <Magnetic><a href="#console" className={`${activeSection === 'console' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>Console</a></Magnetic>
             <Magnetic><a href="#projects" className={`${activeSection === 'projects' ? 'text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'hover:text-cyan-400'} transition-all duration-300`}>Projects</a></Magnetic>
           </div>
           <Magnetic>
@@ -777,6 +864,11 @@ export default function App() {
 
             </div>
           </section>
+        </Reveal>
+
+        {/* INTERACTIVE DEVELOPER CONSOLE SECTION */}
+        <Reveal>
+          <InteractiveTerminal />
         </Reveal>
 
         {/* ENGINEERING PROJECTS */}
