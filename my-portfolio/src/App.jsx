@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import profileImg from './soumya.1708.jpg';
 import aboutImg from './about.jpg';
 import sanjeevaniImg from './sanjeevani.jpg'; 
+import sanjeevaniVid from './Sanjeevani_demo.mp4';
 
 // Import certificate images 
 import tttImg from './Techno Trio Trot.jpg';
@@ -251,6 +252,59 @@ const TechMarquee = () => {
           <span key={idx} className="inline-block hover:text-cyan-400 hover:drop-shadow-[0_0_10px_rgba(34,211,238,0.8)] transition-all duration-300">{tech} •</span>
         ))}
       </div>
+    </div>
+  );
+};
+
+// --- HOVER VIDEO COMPONENT ---
+const HoverVideo = ({ imageSrc, videoSrc, alt }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
+  const timerRef = useRef(null);
+
+  const handleMouseEnter = () => {
+    // Start a 2-second timer before playing the video
+    timerRef.current = setTimeout(() => {
+      setIsPlaying(true);
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0; // Start from beginning
+        videoRef.current.play().catch(err => console.log("Video play interrupted:", err));
+      }
+    }, 2000); // 2000 milliseconds = 2 seconds
+  };
+
+  const handleMouseLeave = () => {
+    // Clear the timer so it doesn't play if they left before 2 seconds
+    if (timerRef.current) clearTimeout(timerRef.current);
+    
+    setIsPlaying(false);
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0; // Reset video to start
+    }
+  };
+
+  return (
+    <div 
+      className="w-full h-full relative cursor-none"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <img 
+        src={imageSrc} 
+        alt={alt} 
+        className={`w-full h-full object-cover object-top absolute inset-0 z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-100'}`} 
+      />
+      {/* The video sits quietly underneath, preloaded and ready */}
+      <video 
+        ref={videoRef}
+        src={videoSrc}
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        className="w-full h-full object-cover object-top absolute inset-0 z-0"
+      />
     </div>
   );
 };
@@ -871,7 +925,7 @@ export default function App() {
           <InteractiveTerminal />
         </Reveal>
 
-        {/* ENGINEERING PROJECTS */}
+{/* ENGINEERING PROJECTS */}
         <Reveal>
           <section id="projects" className="space-y-12 relative z-20">
             <h3 className="text-4xl md:text-5xl font-bold font-display text-white flex items-center gap-4 mb-8">
@@ -883,8 +937,15 @@ export default function App() {
             
             <div className="grid md:grid-cols-2 gap-6">
               <SpotlightCard className="p-0 group flex flex-col hover:border-cyan-500/50">
-                <div className="h-56 border-b border-gray-800 overflow-hidden relative group-hover:opacity-90 transition-opacity">
-                  <img src={sanjeevaniImg} alt="Sanjeevani Dashboard" className="w-full h-full object-cover object-top" />
+                <div className="h-56 border-b border-gray-800 overflow-hidden relative">
+                  
+                  {/* --- NEW HOVER VIDEO PLACED HERE --- */}
+                  <HoverVideo 
+                    imageSrc={sanjeevaniImg} 
+                    videoSrc={sanjeevaniVid} 
+                    alt="Sanjeevani Dashboard" 
+                  />
+                  
                 </div>
                 
                 <div className="p-8 flex flex-col flex-grow">
@@ -916,7 +977,7 @@ export default function App() {
                   </div>
 
                   <Magnetic>
-                    <a href="https://github.com/soumya1708/Sanjeevani" target="_blank" rel="noreferrer" className="inline-flex justify-center items-center gap-2 px-5 py-3 bg-cyan-600/10 text-cyan-400 font-bold text-[15.4px] font-display tracking-wide uppercase rounded-lg hover:bg-cyan-500 hover:text-black transition-colors border border-cyan-500/20 w-full md:w-auto">
+                    <a href="https://github.com/soumya1708/Sanjeevani" target="_blank" rel="noreferrer" className="inline-flex justify-center items-center gap-2 px-5 py-3 bg-cyan-600/10 text-cyan-400 font-bold text-[15.4px] font-display tracking-wide uppercase rounded-lg hover:bg-cyan-500 hover:text-black transition-colors border border-cyan-500/20 w-full md:w-auto cursor-none">
                        Visit Project
                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
