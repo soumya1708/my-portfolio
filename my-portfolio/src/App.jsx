@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import profileImg from './soumya.1708.jpg';
 import aboutImg from './about.jpg';
 import sanjeevaniImg from './sanjeevani.jpg'; 
-import sanjeevaniVid from './Sanjeevani_demo.mp4';
+import sanjeevaniVid from './Sanjeevani_demo.mp4'; 
 
 // Import certificate images 
 import tttImg from './Techno Trio Trot.jpg';
@@ -247,7 +247,7 @@ const TechMarquee = () => {
   return (
     <div className="relative w-full overflow-hidden bg-gradient-to-r from-[#030303] via-[#0a0a0a] to-[#030303] border-y border-gray-800/50 py-5 z-20">
       <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-transparent to-[#030303] w-full z-10 pointer-events-none"></div>
-      <div className="marquee-content flex gap-12 whitespace-nowrap text-cyan-500/40 font-mono text-xl font-bold uppercase tracking-widest cursor-none">
+      <div className="marquee-content flex gap-12 whitespace-nowrap text-cyan-500/40 font-mono text-xl font-bold uppercase tracking-widest">
         {[...techStack, ...techStack, ...techStack].map((tech, idx) => (
           <span key={idx} className="inline-block hover:text-cyan-400 hover:drop-shadow-[0_0_10px_rgba(34,211,238,0.8)] transition-all duration-300">{tech} •</span>
         ))}
@@ -263,30 +263,28 @@ const HoverVideo = ({ imageSrc, videoSrc, alt }) => {
   const timerRef = useRef(null);
 
   const handleMouseEnter = () => {
-    // Start a 2-second timer before playing the video
     timerRef.current = setTimeout(() => {
       setIsPlaying(true);
       if (videoRef.current) {
-        videoRef.current.currentTime = 0; // Start from beginning
+        videoRef.current.currentTime = 0; 
         videoRef.current.play().catch(err => console.log("Video play interrupted:", err));
       }
-    }, 2000); // 2000 milliseconds = 2 seconds
+    }, 2000); 
   };
 
   const handleMouseLeave = () => {
-    // Clear the timer so it doesn't play if they left before 2 seconds
     if (timerRef.current) clearTimeout(timerRef.current);
     
     setIsPlaying(false);
     if (videoRef.current) {
       videoRef.current.pause();
-      videoRef.current.currentTime = 0; // Reset video to start
+      videoRef.current.currentTime = 0; 
     }
   };
 
   return (
     <div 
-      className="w-full h-full relative cursor-none"
+      className="w-full h-full relative cursor-pointer"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -295,7 +293,6 @@ const HoverVideo = ({ imageSrc, videoSrc, alt }) => {
         alt={alt} 
         className={`w-full h-full object-cover object-top absolute inset-0 z-10 transition-opacity duration-500 ${isPlaying ? 'opacity-0' : 'opacity-100'}`} 
       />
-      {/* The video sits quietly underneath, preloaded and ready */}
       <video 
         ref={videoRef}
         src={videoSrc}
@@ -363,7 +360,7 @@ const InteractiveTerminal = () => {
         Developer Console
       </h3>
       
-      <SpotlightCard className="w-full h-[350px] md:h-[400px] flex flex-col font-mono text-[13.2px] md:text-[15.4px] border border-gray-800 rounded-xl overflow-hidden shadow-2xl p-0 cursor-text">
+      <SpotlightCard className="w-full h-[350px] md:h-[400px] flex flex-col font-mono text-[13.2px] md:text-[15.4px] border border-gray-800 rounded-xl overflow-hidden shadow-2xl p-0">
         <div className="bg-[#111] p-3 flex gap-2 border-b border-gray-800 items-center">
            <div className="w-3 h-3 rounded-full bg-red-500"></div>
            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -534,7 +531,7 @@ export default function App() {
                 Engineering student building reliable applications from frontend interfaces to backend APIs. Focused on clean code, database architectures, and real-world system implementations.
               </p>
               
-              {/* ACTION BUTTONS (Flex-wrap applied to stop mobile cutoff) */}
+              {/* ACTION BUTTONS */}
               <div className="flex flex-row flex-wrap items-center gap-3 md:gap-4 pt-4 relative z-20 w-full pb-4 animate-[fadeIn_1s_ease-out_2.5s_both]">
                 <Magnetic>
                   <a href="#projects" className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-black font-bold font-display text-[17.6px] transition-all flex items-center gap-2 shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
@@ -838,9 +835,11 @@ export default function App() {
                    className="w-full h-full object-contain p-4 opacity-80 group-hover:opacity-100 transition-opacity"
                  />
               </SpotlightCard>
+              
+              {/* UPDATED TOP LANGUAGES API (Donut Chart up to 10 languages) */}
               <SpotlightCard className="p-1 h-full min-h-[180px] flex items-center justify-center group hover:border-violet-500/50 w-full overflow-hidden">
                  <img
-                   src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=soumya1708&theme=transparent"
+                   src="https://github-readme-stats.vercel.app/api/top-langs/?username=soumya1708&layout=donut&theme=transparent&hide_border=true&title_color=8b5cf6&text_color=9ca3af&bg_color=0a0a0a&langs_count=10"
                    alt="Top Languages"
                    className="w-full h-full object-contain p-2 opacity-80 group-hover:opacity-100 transition-opacity drop-shadow-[0_0_15px_rgba(139,92,246,0.2)]"
                  />
@@ -925,7 +924,7 @@ export default function App() {
           <InteractiveTerminal />
         </Reveal>
 
-{/* ENGINEERING PROJECTS */}
+        {/* ENGINEERING PROJECTS */}
         <Reveal>
           <section id="projects" className="space-y-12 relative z-20">
             <h3 className="text-4xl md:text-5xl font-bold font-display text-white flex items-center gap-4 mb-8">
@@ -977,7 +976,7 @@ export default function App() {
                   </div>
 
                   <Magnetic>
-                    <a href="https://github.com/soumya1708/Sanjeevani" target="_blank" rel="noreferrer" className="inline-flex justify-center items-center gap-2 px-5 py-3 bg-cyan-600/10 text-cyan-400 font-bold text-[15.4px] font-display tracking-wide uppercase rounded-lg hover:bg-cyan-500 hover:text-black transition-colors border border-cyan-500/20 w-full md:w-auto cursor-none">
+                    <a href="https://github.com/soumya1708/Sanjeevani" target="_blank" rel="noreferrer" className="inline-flex justify-center items-center gap-2 px-5 py-3 bg-cyan-600/10 text-cyan-400 font-bold text-[15.4px] font-display tracking-wide uppercase rounded-lg hover:bg-cyan-500 hover:text-black transition-colors border border-cyan-500/20 w-full md:w-auto">
                        Visit Project
                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
