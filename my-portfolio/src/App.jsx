@@ -717,7 +717,7 @@ export default function App() {
                   Technical Stack & Tools
                 </h4>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <SpotlightCard className="p-6">
                     <p className="text-[11px] text-gray-500 font-mono uppercase tracking-widest mb-4">Languages</p>
                     <div className="space-y-4">
@@ -761,6 +761,80 @@ export default function App() {
                   </SpotlightCard>
                 </div>
               </div>
+                  <SpotlightCard className="p-6 h-fit">
+  <p className="text-[11px] text-gray-500 font-mono uppercase tracking-widest mb-4">
+    Frontend Architecture
+  </p>
+
+  <div className="space-y-4">
+
+    {/* JavaScript */}
+    <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+      <svg
+        className="w-5 h-5"
+        viewBox="0 0 128 128"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect width="128" height="128" fill="#F7DF1E"/>
+        <path
+          d="M35.7 106.3l9.8-5.9c1.9 3.4 3.6 6.2 7.7 6.2
+          3.9 0 6.4-1.5 6.4-7.4V59.1h12v40.3
+          c0 12.2-7.2 17.8-17.6 17.8-9.4 0-14.8-4.9-17.6-10.9z"
+          fill="#000"
+        />
+        <path
+          d="M78.2 105l9.8-5.7c2.6 4.3 6 7.5 12 7.5
+          5 0 8.2-2.5 8.2-6 0-4.2-3.3-5.7-8.9-8.2l-3-1.3
+          c-8.7-3.7-14.4-8.4-14.4-18.3
+          0-9.1 6.9-16 17.8-16
+          7.7 0 13.2 2.7 17.2 9.7l-9.4 6
+          c-2.1-3.7-4.3-5.2-7.8-5.2
+          -3.5 0-5.8 2.2-5.8 5.2
+          0 3.7 2.3 5.2 7.5 7.5l3 1.3
+          c10.2 4.4 15.9 8.8 15.9 18.9
+          0 10.8-8.5 16.7-19.9 16.7
+          -11.2 0-18.5-5.3-22.1-12.4z"
+          fill="#000"
+        />
+      </svg>
+      JavaScript
+    </div>
+
+    {/* HTML */}
+    <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+      <svg
+        className="w-5 h-5"
+        viewBox="0 0 128 128"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path fill="#E44D26" d="M19.5 114L9 0h110l-10.5 114L64 128"/>
+        <path fill="#F16529" d="M64 117.7l35.2-9.8L108 9H64"/>
+        <path fill="#EBEBEB" d="M64 52.2H46.4l-1.2-13.5H64V25.5H30.7l.3 3.6 3.2 36h29.8z"/>
+        <path fill="#EBEBEB" d="M64 86.4l-.1.1-14.8-4-1-11.1H34.8l2 22.5L64 101.5z"/>
+        <path fill="#FFF" d="M63.9 52.2V65.4h16.4l-1.5 17.1-14.9 4V101.5l27.2-7.6.2-2.4 3.1-34.7.3-3.6z"/>
+        <path fill="#FFF" d="M63.9 25.5v13.2h32.1l.3-3.3.7-6.3.3-3.6z"/>
+      </svg>
+      HTML5
+    </div>
+
+    {/* CSS */}
+    <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+      <svg
+        className="w-5 h-5"
+        viewBox="0 0 128 128"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path fill="#1572B6" d="M19 114L8.5 0h111L109 114 64 128"/>
+        <path fill="#33A9DC" d="M64 117.5l36.3-10.1L109.3 9H64"/>
+        <path fill="#FFF" d="M64 52.3H82.2l1.3-13.8H64V25h34.2l-.3 3.6-3.5 37.2H64z"/>
+        <path fill="#EBEBEB" d="M64 86.4l-.1.1-15.3-4.1-1-11.2H34.3l2 22.7L64 101.6z"/>
+        <path fill="#FFF" d="M81 71.2l-1.6 17.2L64 92.5v14l27.4-7.6.2-2.4 2.4-25.3z"/>
+      </svg>
+      CSS3
+    </div>
+
+  </div>
+</SpotlightCard>
 
               {/* Right Column: Professional Attributes (Progress Bars) */}
               <div className="space-y-6 lg:pl-8 mt-8 lg:mt-0">
