@@ -708,133 +708,135 @@ export default function App() {
               <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-violet-500 mx-auto rounded-full mt-2"></div>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-12 pt-4">
+            <div className="grid lg:grid-cols-2 gap-12 pt-4 items-start">
               
               {/* Left Column: Technical Stack & Tools */}
-              <div className="space-y-6">
-                <h4 className="text-xl font-bold font-display text-cyan-400 flex items-center gap-2 mb-6">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                  Technical Stack & Tools
-                </h4>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <SpotlightCard className="p-6">
-                    <p className="text-[11px] text-gray-500 font-mono uppercase tracking-widest mb-4">Languages</p>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
-                        <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 8h1a4 4 0 110 8h-1M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8zM6 2v3M10 2v3M14 2v3"></path></svg>
-                        Java (Core + DSA)
-                      </div>
-                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
-                        <svg className="w-5 h-5" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M53.8 4.3C38.4 4.3 35.9 11 35.9 11L35.8 24.9H54.4V30H34.8C34.8 30 15.4 29.2 15.4 48.3C15.4 67.2 32.2 66.2 32.2 66.2H37.3V57.3C37.3 47.1 45.9 38.8 56.4 38.8H75.5C75.5 38.8 85.5 39.2 85.5 29V13.6C85.5 13.6 86.9 4.3 73.8 4.3H53.8ZM45.9 12.7C48.1 12.7 49.9 14.5 49.9 16.7C49.9 18.9 48.1 20.7 45.9 20.7C43.7 20.7 41.9 18.9 41.9 16.7C41.9 14.5 43.7 12.7 45.9 12.7Z" fill="#387EB8"/>
-                          <path d="M56.2 105.7C71.6 105.7 74.1 99 74.1 99L74.2 85.1H55.5V80H75.1C75.1 80 94.5 80.8 94.5 61.7C94.5 42.8 77.7 43.8 77.7 43.8H72.6V52.7C72.6 62.9 64 71.2 53.5 71.2H34.4C34.4 71.2 24.4 70.8 24.4 81V96.4C24.4 96.4 23 105.7 36.1 105.7H56.2ZM64.1 97.3C61.9 97.3 60.1 95.5 60.1 93.3C60.1 91.1 61.9 89.3 64.1 89.3C66.3 89.3 68.1 91.1 68.1 93.3C68.1 95.5 66.3 97.3 64.1 97.3Z" fill="#FFE052"/>
-                        </svg>
-                        Python
-                      </div>
-                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
-                        <svg className="w-5 h-5 text-blue-600" viewBox="0 0 128 128" fill="currentColor">
-                          <path fill="#283593" d="M117.5 33.5l-45-26a17 17 0 00-17 0l-45 26a17 17 0 00-8.5 14.7v51.6a17 17 0 008.5 14.7l45 26a17 17 0 0017 0l45-26a17 17 0 008.5-14.7V48.2a17 17 0 00-8.5-14.7z"/>
-                          <path fill="#FFF" d="M92 84.4A32.1 32.1 0 1192 43.6l-13.3 15.5a13.7 13.7 0 100 9.8z"/>
-                        </svg>
-                        C Language
-                      </div>
-                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
-                        <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M4 7c0-1.657 3.582-3 8-3s8 1.343 8 3-3.582 3-8 3-8-1.343-8-3z"></path><path d="M4 7v10c0 1.657 3.582 3 8 3s8-1.343 8-3V7"></path><path d="M4 12c0 1.657 3.582 3 8 3s8-1.343 8-3"></path></svg>
-                        MySQL
-                      </div>
-                    </div>
-                  </SpotlightCard>
+<div className="space-y-6">
+  <h4 className="text-xl font-bold font-display text-cyan-400 flex items-center gap-2 mb-6">
+    <svg
+      className="w-6 h-6"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      strokeWidth="2"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+      />
+    </svg>
+    Technical Stack & Tools
+  </h4>
 
-                  <SpotlightCard className="p-6 h-fit">
-                    <p className="text-[11px] text-gray-500 font-mono uppercase tracking-widest mb-4">Backend Architecture</p>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
-                        <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M12 2C6.477 2 2 6.477 2 12v8h8c5.523 0 10-4.477 10-10V2H12z"></path></svg>
-                        Spring Boot
-                      </div>
-                      <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
-                        Hibernate
-                      </div>
-                    </div>
-                  </SpotlightCard>
-                </div>
-              </div>
-                  <SpotlightCard className="p-6 h-fit">
-  <p className="text-[11px] text-gray-500 font-mono uppercase tracking-widest mb-4">
-    Frontend Architecture
-  </p>
+  <div className="grid grid-cols-[1fr_1fr] gap-4 items-start">
 
-  <div className="space-y-4">
+    {/* Languages */}
+    <SpotlightCard className="p-6 row-span-2">
+      <p className="text-[11px] text-gray-500 font-mono uppercase tracking-widest mb-4">
+        Languages
+      </p>
 
-    {/* JavaScript */}
-    <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
-      <svg
-        className="w-5 h-5"
-        viewBox="0 0 128 128"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <rect width="128" height="128" fill="#F7DF1E"/>
-        <path
-          d="M35.7 106.3l9.8-5.9c1.9 3.4 3.6 6.2 7.7 6.2
-          3.9 0 6.4-1.5 6.4-7.4V59.1h12v40.3
-          c0 12.2-7.2 17.8-17.6 17.8-9.4 0-14.8-4.9-17.6-10.9z"
-          fill="#000"
-        />
-        <path
-          d="M78.2 105l9.8-5.7c2.6 4.3 6 7.5 12 7.5
-          5 0 8.2-2.5 8.2-6 0-4.2-3.3-5.7-8.9-8.2l-3-1.3
-          c-8.7-3.7-14.4-8.4-14.4-18.3
-          0-9.1 6.9-16 17.8-16
-          7.7 0 13.2 2.7 17.2 9.7l-9.4 6
-          c-2.1-3.7-4.3-5.2-7.8-5.2
-          -3.5 0-5.8 2.2-5.8 5.2
-          0 3.7 2.3 5.2 7.5 7.5l3 1.3
-          c10.2 4.4 15.9 8.8 15.9 18.9
-          0 10.8-8.5 16.7-19.9 16.7
-          -11.2 0-18.5-5.3-22.1-12.4z"
-          fill="#000"
-        />
-      </svg>
-      JavaScript
-    </div>
+      <div className="space-y-4">
+        <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+          <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8h1a4 4 0 110 8h-1M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8zM6 2v3M10 2v3M14 2v3"/>
+          </svg>
+          Java (Core + DSA)
+        </div>
 
-    {/* HTML */}
-    <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
-      <svg
-        className="w-5 h-5"
-        viewBox="0 0 128 128"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path fill="#E44D26" d="M19.5 114L9 0h110l-10.5 114L64 128"/>
-        <path fill="#F16529" d="M64 117.7l35.2-9.8L108 9H64"/>
-        <path fill="#EBEBEB" d="M64 52.2H46.4l-1.2-13.5H64V25.5H30.7l.3 3.6 3.2 36h29.8z"/>
-        <path fill="#EBEBEB" d="M64 86.4l-.1.1-14.8-4-1-11.1H34.8l2 22.5L64 101.5z"/>
-        <path fill="#FFF" d="M63.9 52.2V65.4h16.4l-1.5 17.1-14.9 4V101.5l27.2-7.6.2-2.4 3.1-34.7.3-3.6z"/>
-        <path fill="#FFF" d="M63.9 25.5v13.2h32.1l.3-3.3.7-6.3.3-3.6z"/>
-      </svg>
-      HTML5
-    </div>
+        <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+          <img
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+            alt="Python"
+            className="w-5 h-5"
+          />
+          Python
+        </div>
 
-    {/* CSS */}
-    <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
-      <svg
-        className="w-5 h-5"
-        viewBox="0 0 128 128"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path fill="#1572B6" d="M19 114L8.5 0h111L109 114 64 128"/>
-        <path fill="#33A9DC" d="M64 117.5l36.3-10.1L109.3 9H64"/>
-        <path fill="#FFF" d="M64 52.3H82.2l1.3-13.8H64V25h34.2l-.3 3.6-3.5 37.2H64z"/>
-        <path fill="#EBEBEB" d="M64 86.4l-.1.1-15.3-4.1-1-11.2H34.3l2 22.7L64 101.6z"/>
-        <path fill="#FFF" d="M81 71.2l-1.6 17.2L64 92.5v14l27.4-7.6.2-2.4 2.4-25.3z"/>
-      </svg>
-      CSS3
-    </div>
+        <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+          <img
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"
+            alt="C"
+            className="w-5 h-5"
+          />
+          C Language
+        </div>
+
+        <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+          <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+            <path d="M4 7c0-1.657 3.582-3 8-3s8 1.343 8 3-3.582 3-8 3-8-1.343-8-3z"></path>
+            <path d="M4 7v10c0 1.657 3.582 3 8 3s8-1.343 8-3V7"></path>
+            <path d="M4 12c0 1.657 3.582 3 8 3s8-1.343 8-3"></path>
+          </svg>
+          MySQL
+        </div>
+      </div>
+    </SpotlightCard>
+
+    {/* Backend Architecture */}
+    <SpotlightCard className="p-6">
+      <p className="text-[11px] text-gray-500 font-mono uppercase tracking-widest mb-4">
+        Backend Architecture
+      </p>
+
+      <div className="space-y-4">
+        <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+          <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+            <path d="M12 2C6.477 2 2 6.477 2 12v8h8c5.523 0 10-4.477 10-10V2H12z"/>
+          </svg>
+          Spring Boot
+        </div>
+
+        <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+          </svg>
+          Hibernate
+        </div>
+      </div>
+    </SpotlightCard>
+
+    {/* Frontend Architecture */}
+    <SpotlightCard className="p-6">
+      <p className="text-[11px] text-gray-500 font-mono uppercase tracking-widest mb-4">
+        Frontend Architecture
+      </p>
+
+      <div className="space-y-4">
+
+        <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+          <img
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+            alt="JavaScript"
+            className="w-5 h-5"
+          />
+          JavaScript
+        </div>
+
+        <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+          <img
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"
+            alt="HTML"
+            className="w-5 h-5"
+          />
+          HTML5
+        </div>
+
+        <div className="flex items-center gap-3 text-white text-[15.4px] font-medium">
+          <img
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"
+            alt="CSS"
+            className="w-5 h-5"
+          />
+          CSS3
+        </div>
+
+      </div>
+    </SpotlightCard>
 
   </div>
-</SpotlightCard>
+</div>
 
               {/* Right Column: Professional Attributes (Progress Bars) */}
               <div className="space-y-6 lg:pl-8 mt-8 lg:mt-0">
