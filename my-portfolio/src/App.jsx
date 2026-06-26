@@ -995,6 +995,68 @@ export default function App() {
           </section>
         </Reveal>
 
+        {/* DEVELOPMENT SECTION */}
+<Reveal>
+  <section id="development" className="space-y-8 relative z-20">
+
+    <h3 className="text-4xl md:text-5xl font-bold font-display text-white flex items-center gap-4 mb-8">
+      <span className="p-3 bg-green-500/10 rounded-xl border border-green-500/20 text-green-400 shadow-[0_0_20px_rgba(34,197,94,0.2)]">
+
+        <svg
+          className="w-8 h-8"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M16 7l-4-4-4 4m4-4v18"
+          />
+        </svg>
+
+      </span>
+
+      Development
+    </h3>
+
+    <p className="text-gray-400 text-lg leading-relaxed max-w-3xl">
+      My development journey is driven by consistency and continuous learning.
+      The contribution graph below reflects my daily coding activity,
+      open-source participation, project development and GitHub commits.
+    </p>
+
+    <SpotlightCard className="p-6 group hover:border-green-500/50 transition-all duration-300">
+
+      <div className="flex justify-between items-center mb-6">
+
+        <h4 className="text-2xl font-bold font-display text-white">
+          GitHub Contribution Graph
+        </h4>
+
+        <a
+          href="https://github.com/soumya1708"
+          target="_blank"
+          rel="noreferrer"
+          className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 text-white font-semibold transition"
+        >
+          View GitHub
+        </a>
+
+      </div>
+
+      <img
+        src="https://github-readme-activity-graph.vercel.app/graph?username=soumya1708&theme=github-compact&hide_border=true&bg_color=0a0a0a&color=22d3ee&line=8b5cf6&point=22d3ee&area=true&area_color=22d3ee"
+        alt="GitHub Contribution Graph"
+        className="w-full rounded-xl"
+      />
+
+    </SpotlightCard>
+
+  </section>
+</Reveal>
+
         {/* INTERACTIVE DEVELOPER CONSOLE SECTION */}
         <Reveal>
           <InteractiveTerminal />
