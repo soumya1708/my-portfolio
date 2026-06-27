@@ -518,8 +518,27 @@ export default function App() {
                   Hi I am ..
                 </p>
                 
-                <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-7xl font-black font-display text-white tracking-tighter min-h-[1.2em] break-words drop-shadow-md">
-                  <Typewriter text="Soumya Mondal" speed={100} delay={200} loop={false} />
+               <h1 className="
+               text-[44px]
+               sm:text-[54px]
+               md:text-[64px]
+               lg:text-[78px]
+               xl:text-[88px]
+               font-black
+               font-display
+               text-white
+               tracking-tighter
+               whitespace-nowrap
+               min-h-[1.2em]
+               drop-shadow-md"
+            >
+              <Typewriter
+              text="Soumya Mondal"
+              speed={120}
+              delay={200}
+              loop={false}
+              />
+
                 </h1>
                 
                 <h2 className="text-lg md:text-xl lg:text-2xl font-light text-gray-400 border-l-2 border-cyan-500/50 pl-4 min-h-[1.5em] block w-full">
